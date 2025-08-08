@@ -1,0 +1,30 @@
+package agh.ics.oop;
+
+import agh.ics.oop.model.MoveDirection;
+
+import java.util.ArrayList;
+
+public class OptionsParser {
+
+    private static String[] inputs;
+
+    public OptionsParser(String[] args){
+        this.inputs = args;
+    }
+
+    public static MoveDirection[] parse(){
+
+        var moves = new ArrayList<MoveDirection>();
+
+        for(int i = 0; i < inputs.length; i++){
+            switch (inputs[i]){
+                case "f" -> moves.add(MoveDirection.FORWARD);
+                case "b" -> moves.add(MoveDirection.BACKWARD);
+                case "l" -> moves.add(MoveDirection.LEFT);
+                case "r" -> moves.add(MoveDirection.RIGHT);
+            }
+
+        }
+        return moves.toArray(new MoveDirection[moves.size()]);
+    }
+}
