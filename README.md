@@ -1,132 +1,176 @@
-# Lab 0: Git - rozproszony system kontroli wersji
+# Lab 1: Instrukcje sterujące w Javie
 
-W tym ćwiczeniu zapoznamy się z systemem **Git**, jednym z najbardziej popularnych systemów do wersjonowania kodu źródłowego
-oraz hostingiem do projektów **GitHub**. Git będzie nam towarzyszyć przez cały semestr (a także i pewnie poza zajęciami), dlatego warto poświęcić mu odpowiednio dużo uwagi.
+Celem laboratorium jest zapoznanie się z podstawowymi pojęciami oraz instrukcjami sterującymi w Javie.
 
-## Wstęp
+Najważniejsze zadania:
 
-Git jest rozproszonym systemem wersjonowania pracy. Jego najważniejsze cechy to:
+1. Konfiguracja środowiska.
+2. Stworzenie klasy `World` sterującej programem.
+3. Stworzenie typu wyliczeniowego `MoveDirection` i narzędzia `OptionsParser`.
 
-* możliwość zapisywania stanu kodu źródłowego w określonym momencie
-* możliwość przywracania starych wersji kodu źródłowego
-* możliwość pracy w gałęziach ("branchach")
-* brak centralnego repozytorium kodu (repozytorium rozproszone), co pozwala na lokalne wersjonowanie kodu bez wysyłania go na serwer
 
-## Zadania do wykonania
+## Zadania do wykonania (4xp)
 
-Do wykonania wszystkich ćwiczeń na tym laboratorium potrzebne będą **jedynie zainstalowany Git oraz terminal**. Jeśli nie jesteś fanem pracy z samą konsolą warto zaopatrzyć się też w aplikację z GUI do obsługi Git:
+**Uwaga 1:** Przed zainicjowaniem projektu zalecamy upewnić się, czy połączenie z Internetem jest stabilne i wystarczająco szybkie. Stworzenie projektu wymaga pobrania kilku dodatkowych narzędzi w tle. W szczególności **NIE** polecamy pracy na otwartej sieci `AGH-Guest` (lepiej skorzystać z `AGH-5` lub `AGH-WPA`).
 
-- [GitKraken](https://www.gitkraken.com) - najbardziej zaawansowane narzędzie tego typu, wersja Pro jest darmowa dla studentów korzystających z [GitHub Student Developer Pack](https://education.github.com/pack) (bardzo polecam go sobie aktywować niezależnie od samego Gita!)
-- [SourceTree](https://www.sourcetreeapp.com) - popularny darmowy klient z podstawowymi funkcjami i wizualizacją repozytorium.
+**Uwaga 2:** Projekt tworzony na zajęciach powinien znaleźć się w utworzonym wcześniej repozytorium Git. Kolejne laboratoria będą wymagały rozszerzania tego projektu o nowe elementy. **Pamiętaj, by każdą laborkę rozpoczynać od utworzenia brancha z aktualnego stanu repo (np. "lab1")**, a także o regularnym commitowaniu zmian i udostępnieniu gotowego rozwiązania w formie Pull Requesta do oceny zgodnie z wytycznymi prowadzącego. Zwracaj też uwagę na pliki, które commitujesz - nie umieszczaj w repo śmieci (w razie potrzebny zmodyfikuj *.gitignore*), jedynie sam kod i pliki konfiguracyjne gradle. Polecamy na początek zajrzeć do [dodatkowej instrukcji o pracy z Gitem podczas laboratoriów](../lab0/git_workflow_tutorial.md).
 
-W trakcie semestru będziemy korzystać ze środowiska IntelliJ do tworzenia projektów w Javie. IntelliJ również umożliwia pracę z Gitem, można więc całkowicie zrezygnować z dodatkowych programów. Nie zalecamy jednak tego podejścia, szczególnie na początku przygody z Gitem, ponieważ IntelliJ opakowuje i ukrywa wiele operacji Gita i łatwo stracić nad tym kontrolę. Najlepszym wyborem na program towarzyszący nauce Gita wydaje się obecnie GitKraken. 
+1. Uruchom program IntelliJ.
 
-### Ćwiczenia Git
+2. Utwórz nowy projekt o nazwie `oolab` typu **Gradle**. Pamiętaj, by w kreatorze projektu ustawić pole `Language` na `Java`, `Build system` na `Gradle`  (a **nie** na `IntelliJ`), a `Gradle DSL` najlepiej na `Groovy`. Możesz wybrać (lub w razie potrzeby pobrać) najnowszą wersję JDK, ale zalecamy **21**, ponieważ jest to wersja LTS i instrukcje do laboratoriów są o nią oparte. 
 
-1. Otwórz stronę https://gitexercises.fracz.com 
-2. Postępuj zgodnie z instrukcjami na stronie i zrealizuj **pierwsze 8 ćwiczeń z zestawu** (do *change-branch-history* włącznie).
+3. Po utworzeniu projektu poczekaj aż IntelliJ zainicjuje projekt - może to chwilę potrwać. Jeśli wszystko poszło ok, po lewej stronie zobaczysz drzewo katalogów. Katalog `java` (w `src/main`) powinien mieć niebieską ikonę (oznacza to, że został wykryty jako katalog ze źródłami po zainicjowaniu przez Gradle).
 
-### Przygotowanie własnego repozytorium
+4. W katalogu `src/main/java/` utwórz pakiet `agh.ics.oop` (ppm na `src/main/java` -> `New package`). Możesz też od razu usunąć ewentualne "śmieci" wygenerowane przez IntelliJ (pakiet `org.example`).
 
-1. Zarejestruj się na GitHubie.
+5. W pakiecie `agh.ics.oop` utwórz klasę `World` ze statyczną metodą `main`.
 
-2. Stwórz nowe repozytorium i nazwij je odpowiednio (schemat nazywania poniżej) - będziesz w nim przechowywać rozwiązania zadań z kolejnych laboratoriów.
+6. Zaimplementuj metodę `main` tak aby wyświetlały się dwa komunikaty:
+   - `system wystartował`
+   - `system zakończył działanie`
 
-   * nazwa repozytorium to PO_2024_[dzień][godzina]_[nazwisko studenta] - np. PO_2024_PN1500_BRZECZYSZCZYKIEWICZ lub PO_2024_WT1820_PAPADOPOULOS. Dzień prosimy zapisać w formacie dwuliterowym bez polskich znaków (PN, WT, SR, CZ, PT),
-   * repozytorium może być prywatne lub publiczne. Na potrzeby naszych zajęć repozytoria powinny być **prywatne**,
-   * możesz na tym etapie zaznaczyć opcję *Add a README file* - zainicjujesz w ten sposób repozytorium plikiem, którego zawartość będzie domyślna na głównej stronie repozytorium.
+7. Uruchom program, np. klikając zieloną ikonę pojawiającą się na początku linii, w której występuje metoda `main`.
 
-3. Nadaj uprawnienia dostępu do repozytorium prowadzącemu zajęcia (*Settings --> Collaborators --> Add people*).
+8. Dodaj metodę statyczną `run`, która jest wywoływana pomiędzy tymi komunikatami.
 
-4. Sklonuj repozytorium na lokalny komputer.
+9. Metoda `run` powinna informować o tym, że zwierzak idzie do przodu.
 
-5. Utwórz *branch* o nazwie **lab0** i przełącz się na niego.
+10. Uruchom program.
 
-6. Zmodyfikuj plik README.MD, dodając do niego następujące informacje:
+11. Rozszerz metodę `run` tak, by akceptowała tablicę argumentów typu `String`. Przekaż do niej tablicę `args`, która zawiera parametry wywołania programu.
 
-   1. Imię i nazwisko
+12. Po komunikacie o poruszaniu się do przodu wypisz w konsoli wartości wszystkich argumentów tej metody oddzielone przecinkami. Zwróć uwagę na to, żeby nie było nadmiarowych przecinków.
 
-   2. Grupę i godzinę zajęć
+13. Uruchom program z dowolnymi parametrami (muszą występować co najmniej 2). W IntelliJ parametry programu możesz ustawiać po wejściu w konfigurację uruchomieniową (rozwijane menu z nazwą klasy --> `Edit configurations...` --> pole `Program arguments`).
 
-   3. Nazwę swojego zwierzaka
+14. Zmodyfikuj program tak, aby interpretował wprowadzone argumenty:
 
-   4. Link do swojego profilu na https://gitexercises.fracz.com
+    - `f` - oznacza, że zwierzak idzie do przodu,
+    - `b` - oznacza, że zwierzak idzie do tyłu,
+    - `r` - oznacza, że zwierzak skręca w prawo,
+    - `l` - oznacza, że zwierzak skręca w lewo,
+    - pozostałe argumenty powinny być ignorowane.
 
-   5. Możesz też dodać dowolny dodatkowy tekst, to Twoje repo. ;)
+15. Poruszanie się oraz zmiana kierunku ma być oznajmiana odpowiednim komunikatem. Program powinien akceptować dowolną liczbę
+    argumentów. Przykładowo wprowadzenie sekwencji `f f r l` powinno dać w wyniku następujące komunikaty:
+    - Start
+    - Zwierzak idzie do przodu
+    - Zwierzak idzie do przodu
+    - Zwierzak skręca w prawo
+    - Zwierzak skręca w lewo
+    - Stop
 
-   **Uwaga**: zanim zapiszesz nazwę swojego zwierzaka, [upewnij się czy nie jest ona już zajęta](https://aghedupl-my.sharepoint.com/:x:/g/personal/miidzik_agh_edu_pl/EbRk-hL6hWJKnESfA3NMlVEBJi-fSMmz-Z9pIOwQ7tpdkg?e=GwTsDz), żeby uniknąć kolizji z innymi studentami! Każdy zwierzak powinien być unikalny. Podlinkowany arkusz aktualizuje się automatycznie co jakiś czas.
+16. Zdefiniuj typ wyliczeniowy (enum) `MoveDirection`, który będzie zawierał wszystkie opcje ruchu (np. `FORWARD`, `BACKWARD` itp.). Enum powinien znajdować się w nowym pliku w pakiecie `agh.ics.oop.model` (utwórz w tym celu pod-pakiet `model`).
+    
+17. Zmodyfikuj program w ten sposób, aby metoda `run` nie akceptowała tablicy łańcuchów znaków, lecz tablicę
+    wartości typu wyliczeniowego (`enum`).  W tym celu dodaj nową klasę `OptionsParser`, zawierającą jedną statyczną metodę. Powinna ona przyjmować tablicę łańcuchów znaków i zwracać tablicę `MoveDirection[]`. Niepoprawne opcje powinny być pomijane (tablica wynikowa powinna zawierać wyłącznie prawidłowe kierunki).
+    **Uwaga:** Każdy plik `.java` może zawierać tylko jedną klasę publiczną i nazwa klasy musi być identyczna z nazwą pliku (także pod względem wielkości liter). Więc `OptionsParser` również powinien znaleźć się w osobnym pliku. Umieść go w głównym pakiecie `agh.ics.oop`.
+    
+18. Zweryfikuj poprawność działania programu poprzez jego uruchomienie.
 
-7. Dodaj plik **.gitignore** i przygotuj go do pracy ze środowiskiem IntelliJ - możesz skorzystać z [gotowego szablonu](https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore).
+19. Zamknij IntelliJ.
 
-8. Zrób *commit* i *push* swoich zmian na zdalny branch o tej samej nazwie (*origin/lab0*).
+20. W pliku `build.gradle` w sekcji `plugins` dodaj linię `id 'application'`: 
+    ```
+    plugins {
+      id 'application'
+      id 'java'
+    }
+    ```
 
-9. Na stronie swojego repozytorium na GitHubie przejdź do sekcji *Pull requests*. Utwórz nowy Pull Request **lab0 --> main**. Możesz go nazwać np. "Lab0 do oceny". 
+21. W tym samym pliku dodaj sekcję:
+    ```
+    application {
+      getMainClass().set('agh.ics.oop.World')
+    }
+    ```
 
-   W ten sposób prowadzący będzie mógł zobaczyć i ocenić Twoje zmiany (np. dodać komentarze w PR). Po sprawdzeniu i ocenieniu Lab PR-a należy scalić z główną gałęzią (przycisk ***Merge pull request*** w widoku PR). 
+22. W tym samym pliku dodaj sekcję:
+    ```
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(21))
+        }
+    }
+    ```
+    (możesz wybrać inną wersję Javy).
 
-   **Podobną procedurę będziemy stosować na wszystkich kolejnych laboratoriach. Pamiętaj by zawsze na początku pracy tworzyć branch z głównej gałęzi, commitować zmiany (liczba commitów nie ma znaczenia), a na koniec przygotować PR do sprawdzenia. Więcej informacji na ten temat znajdziesz w dodatkowej instrukcji:**
-   
-   [Praca z Git na kolejnych laboratoriach](git_workflow_tutorial.md)
-   
-10. Po wykonaniu wszystkich ćwiczeń [zarejestruj swojego zwierzaka wypełniając formularz](https://forms.office.com/Pages/ResponsePage.aspx?id=PwOxgOAhgkq7wPBf3M07yF6m9cn7cIlCm9fFlCH8KDJUMzdIU0NaTzUyTkFLME5TUzBCVFJRUDVJUi4u). W ten sposób prowadzący będzie wiedział również, jak dostać się do Twojego repozytorium.
-   
+23. Otwórz konsolę (np. terminal/PowerShell).
+
+24. Wywołaj komendę `export JAVA_HOME=/usr/lib/jvm/java-21` (pod Windows trzeba będzie ustawić zmienną środowiskową wskazującą na katalog, w którym zainstalowana jest Java). **Komendę trzeba zaadaptować do lokalnej instalacji Javy!**
+
+25. Uruchom program poleceniem `./gradlew run --args="f l"` (lub `gradlew.bat ...` w systemie Windows)
+
+26. Zmodyfikuj argumenty wywołania i sprawdź zachowanie programu.
+    
 
 ## Przydatne informacje
 
-### Polecenia do wykonania za pierwszym razem (jeśli projekt nie jest w żadnym repozytorium)
+* W programie Javy funkcja (a właściwie metoda) `main` musi być częścią jakiejś klasy. Jest ona punktem startowym programu.
 
-W celu przygotowania kodu źródłowego do pracy z Gitem należy, będąc w głównym katalogu naszej aplikacji, wykonać następujące polecenia
+* Metoda `main` akceptuje tablicę argumentów typu `String`, ponadto jest publiczną metodą statyczną:
 
-1. `git init` (zainicjowanie plików Gita: w głównym katalogu naszej aplikacji, tworzony jest katalog `.git`, który
-   zawiera repozytorium kodu źródłowego)
-   
-2. `echo 'out' > .gitignore` (dodanie katalogu `out` do listy ingorowanych plików/katalogów)
+  ```java
+  public class World {
+     public static void main(String[] args) {
+        // treść metody
+     }
+  }
+  ```
 
-   **Uwaga:** Powyższe polecenie w PowerShellu powoduje problemy. W tej sytuacji zalecane jest po prostu utworzenie pliku
-   `.gitignore` w edytorze tekstu i wpisanie do niego linii o treści `out`.
+* Do wypisywania komunikatów użyj metod `System.out.print()` oraz `System.out.println()`.
 
-3. `git add .` (dodanie wszystkich plików, poza ignorowanymi, do *indeksu* Gita)
+* Warunki logiczne w Javie są przechowywane w zmiennej typu `boolean` - nie ma automatycznej konwersji z innych typów.
 
-4. `git status` (sprawdzenie aktualnego statusu kodu źródłowego, polecenie wykonywane bardzo często)
+* W Javie dostępna jest standardowa pętla `for` znana z C/C++. Można również użyć alternatywnej pętli `for` (tzw. `for each`) 
+  do iterowania po elementach kolekcji:
 
-5. `git commit -m 'Initial commit'` (*zatwierdzenie* (zacommitowanie) zmian w historii Gita)
+    ```java
+  for (String argument : arguments) {
+  
+  }
+    ```
 
-6. `git remote add origin https://github.com/<login>/<repozytorium>.git` (dodanie zdalnego repozytorium z Githuba)
+* **Uwaga:** W Javie łańcuchy znaków (oraz inne typy referencyjne) porównuje się za pomocą wywołania `equals`, np.
+  `string1.equals(string2)`. Zapis `string1 == string2` jest składniowo poprawny, ale sprawdza **identyczność referencji**.
 
-9. `git push origin master` (wysłanie zmian do zdalnego repozytorium)
+* Typ wyliczeniowy deklaruje się za pomocą słowa kluczowego `enum`, np.:
 
-### Odtworzenie repozytorium
+  ```java
+  enum MoveDirection {
+    FORWARD,
+    BACKWARD,
+    RIGHT,
+    LEFT
+  }
+  ```
 
-1. `git clone https://github.com/<login>/<repozytorium>.git` - *sklonowanie* zdalnego repozytorium
+* Typu wyliczeniowego można użyć odwołując się do jego składowych, np.:
 
-Alternatywnie
+  ```java
+  MoveDirection direction = MoveDirection.FORWARD;
+  ```
 
-1. IntelliJ -> Import from Git
+* Instrukcję `switch` można używać m. in. na typach wyliczeniowych oraz napisach zarówno w formie instrukcji, jak i wyrażenia, którego wynik można przypisać do zmiennej (od Javy 14):
 
-W poniższych poleceniach fragment ujęty w nawiasy ostre, np. `<file-name>`, należy zastąpić **innym** łańcuchem znaków.
+  ```java
+   switch (argument) {
+    case "f" ->  System.out.println("Do przodu");
+    case "b" ->  System.out.println("Do tyłu");
+  }
+  
+  String message = switch (argument) {
+    case "f" -> "Do przodu";
+    case "b" -> "Do tyłu";
+    default -> "Nieznana komenda";
+  };
+  
+  System.out.println(message);
+  ```
 
-### Zatwierdzenie zmian na koniec pracy
+* W Javie można dość łatwo przekazać fragment tablicy, np. jako rezultat wywołania funkcji lub jako argument pętli `for`. Służy do tego wywołanie: 
 
-1. `git add <file-name>` (dodanie zmian w pliku `<file-name>` do *indeksu* - operację powtórzyć dla każdego modyfikowanego i nowego pliku, lub użyć wyrażenia typu `git add *.java`)
-2. `git commit -m '<Meaningful description of change>'` (*zatwierdzenie* zmian znajdujących się w indeksie)
-3. `git push origin <branch-name>` (wysłanie zmian do zdalnego repozytorium na gałąź `<branch-name>`; jeśli tworzymy nowy branch może być konieczne dodanie przełącznika `--set-upstream-to`)
+  ```java
+  Arrays.copyOfRange(array, startInclusive, endExclusive);
+  ```
 
-
-### Aktualizowanie się względem zdalnej gałęzi `master`
-
-1. `git remote add <remote-repo-name> <remote-repo-address>` (dodanie zdalnego repozytorium; jeśli korzystamy z jednego zdalnego repozytorium, to zwyczajowo ma ono nazwę `origin`).
-2. `git checkout master` (przełączenie się do lokalnej gałęzi master).
-3. `git pull <remote-repo-name> master` (pobranie do lokalnej gałęzi `master` zmian ze zdalnej gałęzi `master`)
-4. `git checkout <feature-branch>` (przełączenie się do gałęzi, na której pracowaliśmy).
-5. `git rebase master` (przepięcie commitów z obecnej gałęzi tak, by poprzedzał je ostatni commit z `master`).
-6. Rozwiązanie konfliktów, ewentualne wprowadzenie zmian.
-7. `git push origin <feature-branch> -f` (wysłanie zaktualizowanej wersji do zdalnej gałęzi `<feature-branch>` w naszym
-   repozytorium).
-
-
-## Przydatne odnośniki
-
-* https://git-scm.com/book/pl/v2 - oficjalny podręcznik Gita, częściowo przetłumaczony na język polski
-* https://guides.github.com/introduction/git-handbook/ - wprowadzenie do Gita, wyjaśnienie najważniejszych koncepcji
-* https://www.atlassian.com/git/tutorials/learn-git-with-bitbucket-cloud - inne wprowadzenie do Gita, zawiera dużo
-  ilustracji
