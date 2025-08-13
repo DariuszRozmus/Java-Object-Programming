@@ -1,6 +1,7 @@
 package agh.ics.oop;
 
 import agh.ics.oop.model.MoveDirection;
+import agh.ics.oop.model.Vector2d;
 
 public class World {
 
@@ -9,6 +10,16 @@ public class World {
         OptionsParser parser = new OptionsParser(args);
         MoveDirection[] directions = parser.parse();
         run(directions);
+//        var vector2d = new Vector2d(1,2);
+//        System.out.println(vector2d);
+
+        Vector2d position1 = new Vector2d(1,2);
+        System.out.println(position1);
+
+        Vector2d position2 = new Vector2d(1,2);
+        System.out.println(position2);
+
+        System.out.println(position1.equals(position2));
         System.out.println("system zakonczyl dzialanie");
     }
 
