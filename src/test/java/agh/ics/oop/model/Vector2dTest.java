@@ -130,7 +130,7 @@ public class Vector2dTest {
         //given
         Vector2d v1 = new Vector2d(1,2);
         Vector2d v2 = new Vector2d(2,2);
-        Vector2d v3 = new Vector2d(1,1);
+        Vector2d v3 = new Vector2d(1,2);
 
         Vector2d v4 = new Vector2d(1,1);
         Vector2d v5 = new Vector2d(2,2);
@@ -140,11 +140,11 @@ public class Vector2dTest {
 
         Vector2d v8 = new Vector2d(-1,-2);
         Vector2d v9 = new Vector2d(-2,-1);
-        Vector2d v10 = new Vector2d(-1,-1);
+        Vector2d v10 = new Vector2d(-2,-2);
 
         Vector2d v11 = new Vector2d(-1,-1);
         Vector2d v12 = new Vector2d(-2,-2);
-        Vector2d v13 = new Vector2d(-1,-1);
+        Vector2d v13 = new Vector2d(-2,-2);
 
         //when then
         assertEquals(v3,v1.lowerLeft(v1));
