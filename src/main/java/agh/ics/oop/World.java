@@ -1,5 +1,6 @@
 package agh.ics.oop;
 
+import agh.ics.oop.model.Animal;
 import agh.ics.oop.model.MoveDirection;
 import agh.ics.oop.model.Vector2d;
 
@@ -19,6 +20,8 @@ public class World {
         Vector2d position2 = new Vector2d(1,2);
         System.out.println(position2);
 
+        Animal animal = new Animal();
+        System.out.println(animal);
         System.out.println(position1.equals(position2));
         System.out.println("system zakonczyl dzialanie");
     }
