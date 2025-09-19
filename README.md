@@ -1,176 +1,184 @@
-# Lab 1: Instrukcje sterujące w Javie
+# Lab 2: Model obiektowy
 
-Celem laboratorium jest zapoznanie się z podstawowymi pojęciami oraz instrukcjami sterującymi w Javie.
+Celem laboratorium jest zapoznanie się z modelem obiektowym Javy, na przykładzie klasy reprezentującej dwuwymiarowy
+wektor. Wprowadzamy też narzędzia do pisania testów jednostkowych.
 
 Najważniejsze zadania:
-
-1. Konfiguracja środowiska.
-2. Stworzenie klasy `World` sterującej programem.
-3. Stworzenie typu wyliczeniowego `MoveDirection` i narzędzia `OptionsParser`.
-
+1. Stworzenie klasy `Vector2d`.
+2. Stworzenie klasy `MapDirection`.
+3. Testy jednostkowe.
 
 ## Zadania do wykonania (4xp)
 
-**Uwaga 1:** Przed zainicjowaniem projektu zalecamy upewnić się, czy połączenie z Internetem jest stabilne i wystarczająco szybkie. Stworzenie projektu wymaga pobrania kilku dodatkowych narzędzi w tle. W szczególności **NIE** polecamy pracy na otwartej sieci `AGH-Guest` (lepiej skorzystać z `AGH-5` lub `AGH-WPA`).
+Uwaga: dla przejrzystości pliki z klasami `Vector2d` oraz `MapDirection` należy umieścić w pakiecie `agh.ics.oop.model`.
 
-**Uwaga 2:** Projekt tworzony na zajęciach powinien znaleźć się w utworzonym wcześniej repozytorium Git. Kolejne laboratoria będą wymagały rozszerzania tego projektu o nowe elementy. **Pamiętaj, by każdą laborkę rozpoczynać od utworzenia brancha z aktualnego stanu repo (np. "lab1")**, a także o regularnym commitowaniu zmian i udostępnieniu gotowego rozwiązania w formie Pull Requesta do oceny zgodnie z wytycznymi prowadzącego. Zwracaj też uwagę na pliki, które commitujesz - nie umieszczaj w repo śmieci (w razie potrzebny zmodyfikuj *.gitignore*), jedynie sam kod i pliki konfiguracyjne gradle. Polecamy na początek zajrzeć do [dodatkowej instrukcji o pracy z Gitem podczas laboratoriów](../lab0/git_workflow_tutorial.md).
+### Klasa `Vector2d`
 
-1. Uruchom program IntelliJ.
+1. Utwórz klasę `Vector2d`, która:
 
-2. Utwórz nowy projekt o nazwie `oolab` typu **Gradle**. Pamiętaj, by w kreatorze projektu ustawić pole `Language` na `Java`, `Build system` na `Gradle`  (a **nie** na `IntelliJ`), a `Gradle DSL` najlepiej na `Groovy`. Możesz wybrać (lub w razie potrzeby pobrać) najnowszą wersję JDK, ale zalecamy **21**, ponieważ jest to wersja LTS i instrukcje do laboratoriów są o nią oparte. 
+   * posiada dwa prywatne pola `x` i `y` typu `int`, które nie mogą być modyfikowane (`final`),
+   * posiada konstruktor akceptujący parametry `x` i `y`, które są przypisywane do pól `x` i `y`,
+   * posiada gettery umożliwiające odczyt wartości utworzonych atrybutów,
+   * posiada metodę `String toString()`, która zamienia pozycję na napis `(x,y)`, np. dla `x = 1` oraz `y = 2`, napis ma postać
+     `(1,2)`,
+   * posiada metodę `boolean precedes(Vector2d other)`, akceptującą inny obiekt tej klasy i zwracającą wartość `true`, jeśli oba pola mają
+     wartość mniejszą bądź równą polom drugiego obiektu,
+   * posiada metodę `boolean follows(Vector2d other)`, akceptującą inny obiekt tej klasy i zwracającą wartość `true`, jeśli oba pola mają
+     wartość większą bądź równą polom drugiego obiektu,
+   * posiada metodę `Vector2d add(Vector2d other)`, która zwraca nowy obiekt klasy `Vector2d`, którego składowe są sumą odpowiednich składowych
+     dodawanych pozycji,
+   * posiada metodę `Vector2d subtract(Vector2d other)`, która zwraca nowy obiekt klasy `Vector2d`, którego składowe są różnicą 
+     odpowiednich składowych odejmowanych pozycji, 
+   * posiada metodę `Vector2d upperRight(Vector2d other)`, która akceptuje inny punkt i zwraca obiekt klasy `Vector2d` posiadający te składowe
+     punktów, które mają większe wartości dla odpowiednich osi (innymi słowy jest prawym górnym rogiem prostokąta, który
+     opisany jest na obu punktach, którego krawędzie są równoległe do osi X i Y),
+   * posiada metodę `Vector2d lowerLeft(Vector2d other)`, która akceptuje inny punkt i zwraca obiekt klasy `Vector2d` posiadający te składowe
+     punktów, które mają mniejsze wartości dla odpowiednich osi (tzn. lewy dolny róg prostokąta),
+   * posiada metodę `Vector2d opposite()`, która zwraca nowy obiekt tej klasy, posiadający zmienione znaki obu składowych,
+   * posiada metodę `boolean equals(Object other)`, która zwraca prawdę, jeśli obie pozycje są sobie równe (zwróć uwagę na typ parametru). **Uwaga:** Zastanów się, jaką inną metodę trzeba dodać po zdefiniowaniu własnego `equals`.
 
-3. Po utworzeniu projektu poczekaj aż IntelliJ zainicjuje projekt - może to chwilę potrwać. Jeśli wszystko poszło ok, po lewej stronie zobaczysz drzewo katalogów. Katalog `java` (w `src/main`) powinien mieć niebieską ikonę (oznacza to, że został wykryty jako katalog ze źródłami po zainicjowaniu przez Gradle).
+2. Poniższy obrazek ilustruje metody `precedes` i `follows`. `v1` poprzedza (precedes) `v2` oraz `v3`. `v2` poprzedza `v3`.
+   Wszystkie wektory poprzedzają również same siebie (relacja ta jest zwrotna). `v3` następuje po (follows) `v2` oraz
+   `v1`, `v2` następuje po `v1`. Wszystkie wektory następują również po samych sobie.
+   ![wektory](vector2d.png)
 
-4. W katalogu `src/main/java/` utwórz pakiet `agh.ics.oop` (ppm na `src/main/java` -> `New package`). Możesz też od razu usunąć ewentualne "śmieci" wygenerowane przez IntelliJ (pakiet `org.example`).
+3. Poniższy obrazek ilustruje metody `lowerLeft` oraz `upperRight`.
+   ![rogi](vector2d-a.png)
 
-5. W pakiecie `agh.ics.oop` utwórz klasę `World` ze statyczną metodą `main`.
+4. W metodzie `main` w klasie `World` wprowadź następujący kod:
 
-6. Zaimplementuj metodę `main` tak aby wyświetlały się dwa komunikaty:
-   - `system wystartował`
-   - `system zakończył działanie`
+   ```java
+   Vector2d position1 = new Vector2d(1,2);
+   System.out.println(position1);
+   Vector2d position2 = new Vector2d(-2,1);
+   System.out.println(position2);
+   System.out.println(position1.add(position2));
+   ```
 
-7. Uruchom program, np. klikając zieloną ikonę pojawiającą się na początku linii, w której występuje metoda `main`.
+   Sprawdź czy uzyskane wyniki są poprawne.
 
-8. Dodaj metodę statyczną `run`, która jest wywoływana pomiędzy tymi komunikatami.
+### Klasa `MapDirection`
 
-9. Metoda `run` powinna informować o tym, że zwierzak idzie do przodu.
+6. Utwórz typ wyliczeniowy `MapDirection` z czterema kierunkami: `NORTH`, `SOUTH`, `WEST` i `EAST`, który:
+   * posiada metodę `toString`, która dla kierunku `EAST` zwraca łańcuch `Wschód`, dla `WEST` - `Zachód`, itd.
+   * posiada metodę `next`, która dla kierunku `EAST` zwraca `SOUTH` (kolejny kierunek zgodnie z ruchem wskazówek
+     zegara) itd.
+   * posiada metodę `previous`, która dla kierunku `EAST` zwraca `NORTH` (kolejny kierunek zgodnie z ruchem przeciwnym
+     do ruchu wskazówek zegara) itd.
+   * posiada metodę `toUnitVector`, która zwraca jednostkowy wektor przemieszczenia typu `Vector2d` zgodny z orientacją na mapie,
+     tzn. dla `NORTH` wektor ten powinien mieć wartość `(0,1)`, dla `WEST` `(-1,0)`, itd.
 
-10. Uruchom program.
+7. Sprawdź w metodzie `main` czy metody te działają zgodnie z opisem.
 
-11. Rozszerz metodę `run` tak, by akceptowała tablicę argumentów typu `String`. Przekaż do niej tablicę `args`, która zawiera parametry wywołania programu.
 
-12. Po komunikacie o poruszaniu się do przodu wypisz w konsoli wartości wszystkich argumentów tej metody oddzielone przecinkami. Zwróć uwagę na to, żeby nie było nadmiarowych przecinków.
+### Testy
 
-13. Uruchom program z dowolnymi parametrami (muszą występować co najmniej 2). W IntelliJ parametry programu możesz ustawiać po wejściu w konfigurację uruchomieniową (rozwijane menu z nazwą klasy --> `Edit configurations...` --> pole `Program arguments`).
 
-14. Zmodyfikuj program tak, aby interpretował wprowadzone argumenty:
+1. Utwórz klasę `MapDirectionTest` w katalogu `src/test/java` w pakiecie `agh.ics.oop.model`.
 
-    - `f` - oznacza, że zwierzak idzie do przodu,
-    - `b` - oznacza, że zwierzak idzie do tyłu,
-    - `r` - oznacza, że zwierzak skręca w prawo,
-    - `l` - oznacza, że zwierzak skręca w lewo,
-    - pozostałe argumenty powinny być ignorowane.
+2. Zaimplementuj test weryfikujący poprawność działania metody `next()` dla wszystkich przypadków (dodaj adnotację
+   `@Test` przed deklaracją metody).
 
-15. Poruszanie się oraz zmiana kierunku ma być oznajmiana odpowiednim komunikatem. Program powinien akceptować dowolną liczbę
-    argumentów. Przykładowo wprowadzenie sekwencji `f f r l` powinno dać w wyniku następujące komunikaty:
-    - Start
-    - Zwierzak idzie do przodu
-    - Zwierzak idzie do przodu
-    - Zwierzak skręca w prawo
-    - Zwierzak skręca w lewo
-    - Stop
+3. Uruchom test, korzystając z zielonych trójkątów po lewej stronie.
 
-16. Zdefiniuj typ wyliczeniowy (enum) `MoveDirection`, który będzie zawierał wszystkie opcje ruchu (np. `FORWARD`, `BACKWARD` itp.). Enum powinien znajdować się w nowym pliku w pakiecie `agh.ics.oop.model` (utwórz w tym celu pod-pakiet `model`).
-    
-17. Zmodyfikuj program w ten sposób, aby metoda `run` nie akceptowała tablicy łańcuchów znaków, lecz tablicę
-    wartości typu wyliczeniowego (`enum`).  W tym celu dodaj nową klasę `OptionsParser`, zawierającą jedną statyczną metodę. Powinna ona przyjmować tablicę łańcuchów znaków i zwracać tablicę `MoveDirection[]`. Niepoprawne opcje powinny być pomijane (tablica wynikowa powinna zawierać wyłącznie prawidłowe kierunki).
-    **Uwaga:** Każdy plik `.java` może zawierać tylko jedną klasę publiczną i nazwa klasy musi być identyczna z nazwą pliku (także pod względem wielkości liter). Więc `OptionsParser` również powinien znaleźć się w osobnym pliku. Umieść go w głównym pakiecie `agh.ics.oop`.
-    
-18. Zweryfikuj poprawność działania programu poprzez jego uruchomienie.
+4. Zaimplementuj test weryfikujący poprawność działania metody `previous()` dla wszystkich przypadków.
 
-19. Zamknij IntelliJ.
+5. Utwórz klasę `Vector2dTest`.
 
-20. W pliku `build.gradle` w sekcji `plugins` dodaj linię `id 'application'`: 
-    ```
-    plugins {
-      id 'application'
-      id 'java'
-    }
-    ```
+6. Dodaj testy weryfikujące poprawność metod: `equals(Object other)`, `toString()`, `precedes(Vector2d other)`, `follows(Vector2d other)`,
+   `upperRight(Vector2d other)`, `lowerLeft(Vector2d other)`, `add(Vector2d other)`, `subtract(Vector2d other)`,
+   `opposite()`.
+   
+7. W podobny sposób przetestuj także `OptionsParser`.
 
-21. W tym samym pliku dodaj sekcję:
-    ```
-    application {
-      getMainClass().set('agh.ics.oop.World')
-    }
-    ```
+   Pamiętaj, że kod testów również powinien być czytelny i dobrze ustrukturyzowany. Warto zapoznać się z konwencją [Given When Then](https://www.j-labs.pl/blog-technologiczny/given-when-then-pattern-in-unit-tests/) i zawsze formułować przypadki testowe tak by jasno opisywały, co chcemy przetestować i jakie powinny być skutki badanej akcji.
 
-22. W tym samym pliku dodaj sekcję:
-    ```
-    java {
-        toolchain {
-            languageVersion.set(JavaLanguageVersion.of(21))
-        }
-    }
-    ```
-    (możesz wybrać inną wersję Javy).
 
-23. Otwórz konsolę (np. terminal/PowerShell).
-
-24. Wywołaj komendę `export JAVA_HOME=/usr/lib/jvm/java-21` (pod Windows trzeba będzie ustawić zmienną środowiskową wskazującą na katalog, w którym zainstalowana jest Java). **Komendę trzeba zaadaptować do lokalnej instalacji Javy!**
-
-25. Uruchom program poleceniem `./gradlew run --args="f l"` (lub `gradlew.bat ...` w systemie Windows)
-
-26. Zmodyfikuj argumenty wywołania i sprawdź zachowanie programu.
-    
 
 ## Przydatne informacje
 
-* W programie Javy funkcja (a właściwie metoda) `main` musi być częścią jakiejś klasy. Jest ona punktem startowym programu.
-
-* Metoda `main` akceptuje tablicę argumentów typu `String`, ponadto jest publiczną metodą statyczną:
-
-  ```java
-  public class World {
-     public static void main(String[] args) {
-        // treść metody
-     }
-  }
-  ```
-
-* Do wypisywania komunikatów użyj metod `System.out.print()` oraz `System.out.println()`.
-
-* Warunki logiczne w Javie są przechowywane w zmiennej typu `boolean` - nie ma automatycznej konwersji z innych typów.
-
-* W Javie dostępna jest standardowa pętla `for` znana z C/C++. Można również użyć alternatywnej pętli `for` (tzw. `for each`) 
-  do iterowania po elementach kolekcji:
-
+* Atrybuty w obiekcie deklarowane są w ciele klasy, np. 
     ```java
-  for (String argument : arguments) {
+    class Vector2d {
+      private int x;
+      private int y;
+    }
+    ```
+* Konstruktor jest specjalną metodą w każdej klasie. Nazywa się tak samo jak klasa i nie zwraca wartości. Konstruktor 
+  pozwala ustalić początkową wartość pól obiektu, jeśli mają być przekazane przez użytkownika, np.
+    ```java
+    class Vector2d {
+      public Vector2d(int x, int y){
+        this.x = x;
+        this.y = y;
+      }
+    }
+    ```
+* Obiekty klasy tworzy się za pomocą wywołania `new`, np. 
+    ```java
+    Vector2d position1 = new Vector2d(1,2);
+    ```
+* Słowo kluczowe `this` odnosi się do obiektu, na rzecz którego wywołano metodę.
+  Przykładowo w języku C moglibyśmy zdefiniować metodę `createPoint`:
+
+    ```C
+    struct Point {
+      int x;
+      int y;
+    }
   
-  }
+    struct Point * createPoint(int x, int y){
+      struct Point * result = malloc(sizeof(struct Point));
+      result->x = x;
+      result->y = y;
+      return result;
+    }
+  
+    struct Point * p1 = createPoint(1,2);
     ```
 
-* **Uwaga:** W Javie łańcuchy znaków (oraz inne typy referencyjne) porównuje się za pomocą wywołania `equals`, np.
-  `string1.equals(string2)`. Zapis `string1 == string2` jest składniowo poprawny, ale sprawdza **identyczność referencji**.
+    Ten kod jest analogiczny do konstruktora, z ta różnicą, że w konstruktorze nie tworzymy obiektu *explicite*, tylko mamy do niego dostęp za pomocą słowa kluczowego `this`.
 
-* Typ wyliczeniowy deklaruje się za pomocą słowa kluczowego `enum`, np.:
+* Metoda `equals` ma zwykle taki sam schemat:
 
-  ```java
-  enum MoveDirection {
-    FORWARD,
-    BACKWARD,
-    RIGHT,
-    LEFT
-  }
-  ```
+    ```java
+    public boolean equals(Object other){
+      if (this == other)
+        return true;
+      if (!(other instanceof Vector2d))
+        return false;
+      Vector2d that = (Vector2d) other;
+      // tutaj przeprowadzane jest faktyczne porównanie
+    }
+    ```
 
-* Typu wyliczeniowego można użyć odwołując się do jego składowych, np.:
+    Należy również pamiętać, że zmiana metody `equals` powinna powodować zmianę metody `hashCode`, w przeciwnym razie
+umieszczenie obiektów w kolekcji takiej jak `Set` będzie niezgodne z semantyką metody `equals` (czyt. dużo debuggowania).
 
-  ```java
-  MoveDirection direction = MoveDirection.FORWARD;
-  ```
 
-* Instrukcję `switch` można używać m. in. na typach wyliczeniowych oraz napisach zarówno w formie instrukcji, jak i wyrażenia, którego wynik można przypisać do zmiennej (od Javy 14):
-
-  ```java
-   switch (argument) {
-    case "f" ->  System.out.println("Do przodu");
-    case "b" ->  System.out.println("Do tyłu");
-  }
+* Definicję typu wyliczeniowego można rozszerzać, dodając do niego pola i metody. Wymaga to umieszczenia średnika po ostatniej
+  wartości typu, np.:
+    ```java
+    enum MapDirection {
+      NORTH,
+      SOUTH,
+      EAST,
+      WEST;
   
-  String message = switch (argument) {
-    case "f" -> "Do przodu";
-    case "b" -> "Do tyłu";
-    default -> "Nieznana komenda";
-  };
-  
-  System.out.println(message);
-  ```
+      public String toString(){
+        return switch(this) {
+          case NORTH -> "Północ";
+          case SOUTH -> "Południe";
+          //...
+        }
+      }
+    }
+    ```
 
-* W Javie można dość łatwo przekazać fragment tablicy, np. jako rezultat wywołania funkcji lub jako argument pętli `for`. Służy do tego wywołanie: 
+* Metody testujące posiadają adnotację `@Test`.
 
-  ```java
-  Arrays.copyOfRange(array, startInclusive, endExclusive);
-  ```
+* W metodach testujących można użyć m.in. następujących asercji:
+  * `assertEquals(a, b)` - weryfikuje czy obiekty `a` i `b` są sobie równe (korzystając z metody `equals`),
+  * `assertTrue(a)` - weryfikuje czy wartość logiczna `a` jest prawdą,
+  * `assertFalse(a)` - weryfikuje czy wartość logiczna `a` jest fałszem.
 

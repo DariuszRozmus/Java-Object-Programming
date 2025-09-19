@@ -6,13 +6,13 @@ import java.util.ArrayList;
 
 public class OptionsParser {
 
-    private static String[] inputs;
+//    private static String[] inputs;
 
-    public OptionsParser(String[] args){
-        this.inputs = args;
+    public OptionsParser(){
+//        this.inputs = args;
     }
 
-    public static MoveDirection[] parse(){
+    public static MoveDirection[] parse(String[] inputs){
 
         var moves = new ArrayList<MoveDirection>();
 
