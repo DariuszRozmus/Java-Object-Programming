@@ -7,8 +7,8 @@ public class World {
 
     public static void main(String[] args) {
         System.out.println("system wystartowal");
-        OptionsParser parser = new OptionsParser(args);
-        MoveDirection[] directions = parser.parse();
+        OptionsParser parser = new OptionsParser();
+        MoveDirection[] directions = parser.parse(args);
         run(directions);
 //        var vector2d = new Vector2d(1,2);
 //        System.out.println(vector2d);
