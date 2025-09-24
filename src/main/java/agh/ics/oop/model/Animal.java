@@ -4,8 +4,8 @@ public class Animal {
 
     private MapDirection direction;
     private Vector2d position;
-    Vector2d UPCORNER = new Vector2d(4, 4);
-    Vector2d DOWNCORNER = new Vector2d(0, 0);
+    private final Vector2d UPCORNER = new Vector2d(4, 4);
+    private final Vector2d DOWNCORNER = new Vector2d(0, 0);
 
     public Animal(Vector2d position) {
         this.position = position;
@@ -18,6 +18,10 @@ public class Animal {
 
     public boolean isAt(Vector2d position) {
         return this.position.equals(position);
+    }
+
+    public MapDirection getDirection() {
+        return direction;
     }
 
     public void move(MoveDirection direction) {
