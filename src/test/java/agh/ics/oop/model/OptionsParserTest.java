@@ -3,6 +3,9 @@ package agh.ics.oop.model;
 import agh.ics.oop.OptionsParser;
 import agh.ics.oop.model.MoveDirection;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class OptionsParserTest {
@@ -23,14 +26,14 @@ public class OptionsParserTest {
 
         OptionsParser parser = new OptionsParser();
 
-        MoveDirection[] moveDirections = new MoveDirection[] {MoveDirection.BACKWARD, MoveDirection.FORWARD,
-                MoveDirection.RIGHT, MoveDirection.LEFT};
+        List<MoveDirection> moveDirections = List.of(MoveDirection.BACKWARD, MoveDirection.FORWARD,
+                MoveDirection.RIGHT, MoveDirection.LEFT);
 
         //when
-        MoveDirection[] result = parser.parse(moves);
+        List<MoveDirection> result = parser.parse(moves);
 
         //then
-        assertArrayEquals(moveDirections, result);
+        assertIterableEquals(moveDirections, result);
     }
 
     @Test
@@ -47,14 +50,14 @@ public class OptionsParserTest {
 
         OptionsParser parser = new OptionsParser();
 
-        MoveDirection[] moveDirections = new MoveDirection[] {MoveDirection.BACKWARD, MoveDirection.LEFT,
-                MoveDirection.FORWARD, MoveDirection.RIGHT};
+        List<MoveDirection> moveDirections = List.of(MoveDirection.BACKWARD, MoveDirection.LEFT,
+                MoveDirection.FORWARD, MoveDirection.RIGHT);
 
         //when
-        MoveDirection[] result = parser.parse(moves);
+        List<MoveDirection> result = parser.parse(moves);
 
         //then
-        assertArrayEquals(moveDirections, result);
+        assertIterableEquals(moveDirections, result);
     }
 
     @Test
@@ -71,12 +74,12 @@ public class OptionsParserTest {
 
         OptionsParser parser = new OptionsParser();
 
-        MoveDirection[] moveDirections = new MoveDirection[] {};
+        List<MoveDirection> moveDirections = List.of();
 
         //when
-        MoveDirection[] result = parser.parse(moves);
+        List<MoveDirection> result = parser.parse(moves);
 
         //then
-        assertArrayEquals(moveDirections, result);
+        assertIterableEquals(moveDirections, result);
     }
 }
