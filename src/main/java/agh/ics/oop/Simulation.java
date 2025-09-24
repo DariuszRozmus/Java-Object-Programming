@@ -22,11 +22,18 @@ public class Simulation {
             System.out.println(animal);
         }
     }
+    public List<Animal> getAnimals(){
+        return animals;
+    }
 
     public void showMoves(){
         for(MoveDirection move : moves){
             System.out.println(move);
         }
+    }
+
+    public List<MoveDirection> getMoves(){
+        return moves;
     }
 
     public void run(){

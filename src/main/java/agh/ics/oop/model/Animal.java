@@ -20,6 +20,10 @@ public class Animal {
         return this.position.equals(position);
     }
 
+    public MapDirection getDirection() {
+        return direction;
+    }
+
     public void move(MoveDirection direction) {
         switch (direction) {
             case FORWARD-> {
