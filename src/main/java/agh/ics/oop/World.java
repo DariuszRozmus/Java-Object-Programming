@@ -3,33 +3,30 @@ package agh.ics.oop;
 import agh.ics.oop.model.Animal;
 import agh.ics.oop.model.MoveDirection;
 import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.Simulation;
+import java.util.List;
+
+import static agh.ics.oop.model.MoveDirection.*;
 
 public class World {
 
     public static void main(String[] args) {
         System.out.println("system wystartowal");
         OptionsParser parser = new OptionsParser();
-        MoveDirection[] directions = parser.parse(args);
-        run(directions);
-//        var vector2d = new Vector2d(1,2);
-//        System.out.println(vector2d);
+        List<MoveDirection> directions = parser.parse(args);
+        List<Vector2d> positions = List.of(new Vector2d(2,2));
+        Simulation simulation = new Simulation(positions, directions);
+        simulation.run();
+        simulation.showAnimals();
+        simulation.showMoves();
 
-        Vector2d position1 = new Vector2d(1,2);
-        System.out.println(position1);
-
-        Vector2d position2 = new Vector2d(1,2);
-        System.out.println(position2);
-
-        Animal animal = new Animal();
-        System.out.println(animal);
-        System.out.println(position1.equals(position2));
         System.out.println("system zakonczyl dzialanie");
     }
 
-    public static void run(MoveDirection[] directions){
+    public static void run(List<MoveDirection> directions){
 
-        for(int i = 0; i < directions.length; i++ ){
-            switch (directions[i]){
+        for(MoveDirection direction : directions){
+            switch (direction){
                 case FORWARD -> System.out.println("zwierzak idzie do przodu");
                 case BACKWARD -> System.out.println("zwierzak idzie do tylu");
                 case LEFT -> System.out.println("zwierzak skreca w lewo");
