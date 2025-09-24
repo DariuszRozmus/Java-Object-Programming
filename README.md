@@ -1,95 +1,112 @@
-# Lab 3: Interakcje między obiektami
+# Lab 4: Interfejsy i mapy
 
-Celem laboratorium jest wykorzystanie modelu obiektowego do rozwiązania prostego zadania. Wykorzystamy wcześniej zaimplementowane klasy, dzięki czemu unikniemy powtórzeń i sprawimy, że rozwiązanie będzie czytelne. Wprowadzimy także nowe struktury danych - kolekcje obiektów.
+Celem laboratorium jest zapoznanie się z mechanizmem interfejsów oraz specjalnym typem struktury danych do przechowywania wielu obiektów - mapą.
 
 Najważniejsze zadania:
 
-1. Stworzenie klasy `Animal`.
-2. Stworzenie klasy `Simulation`, która pozwoli poruszać zwierzętami.
-3. Zapoznanie się z kolekcjami w Javie, na przykładzie list.
+1. Stworzenie klasy `RectangularMap` do przechowywania wielu zwierząt i ich pozycji z wykorzystaniem `HashMap`.
+2. Zabezpieczenie kontraktów między mapą a zwierzęciem.
+3. Konsolowa wizualizacja mapy podczas symulacji.
 4. Testy integracyjne.
 
-## Zadania do wykonania (4xp)
+## Zadania do wykonania
 
-### Model `Animal`
+1. Przyjrzyj się interfejsom `WorldMap` oraz `MoveValidator`, które znajdują się w katalogu z tym konspektem i skopiuj je do swojego projektu. Skopiuj także klasę `MapVisualizer` - wykorzystasz ją w dalszych zadaniach. Umieść wszystkie klasy w odpowiednich pakietach, zgodnie z deklaracjami w ich nagłówkach.
 
+2. W pakiecie `agh.ics.oop.model` zdefiniuj klasę `RectangularMap`.
 
-1. Wykorzystaj definicje klas `Vector2d`, `MapDirection` oraz `MoveDirection` z laboratorium 2.
-2. W pakiecie `agh.ics.oop.model` utwórz klasę `Animal`, która:
-    * posiada atrybut określający obecną orientację zwierzęcia (początkowo zawsze ustawioną na `NORTH`),
-    * posiada atrybut określający położenie zwierzęcia na mapie,
-    * posiada dwa konstruktory:
-        * domyślny, który ustawia pozycję na `Vector2d(2,2)` i orientację na `NORTH` (przyjmij, że zwierzę znajduje się w pierwszej ćwiartce układu współrzędnych, a północ jest tożsama z kierunkiem wyznaczanym przez rosnące wartości na osi OY)
-        * przyjmujący i ustawiający pozycję podawaną z zewnątrz. Orientacja początkowa powinna być ustawiona na `NORTH`.
-    * definiuje metodę `toString()`, która w reprezentacji łańcuchowej zawiera informacje o położeniu zwierzęcia (pozycję
-      oraz orientację),
-    * definiuje metodę `boolean isAt(Vector2d position)`, która zwraca prawdę, jeśli zwierzę znajduje się na pozycji `position`.
-3. Zmodyfikuj klasę `World`, która w metodzie `main` stworzy zwierzę i wyświetli w konsoli jego pozycję.
-4. Dodaj do klasy `Animal` metodę `move(MoveDirection direction)`, która:
+3. Podstawowym atrybutem klasy `RectangularMap` powinna być struktura przechowująca zwierzęta na ich pozycjach. Do realizacji takiego odwzorowania wykorzystaj mapę (słownik). Z każdą aktualną pozycją zwierzęcia (`Vector2d`) powiążesz obiekt `Animal`. Deklaracja typu takiego atrybutu powinna wyglądać tak: `Map<Vector2d, Animal> animals = new HashMap<>();`.
 
-    * Dla kierunków `RIGHT` i `LEFT` zmienia orientację zwierzęcia na mapie, np. kiedy zwierzę ma orientację `NORTH`, a
-      zmiana kierunku to `RIGHT`, to orientacja zwierzęcia powinna wynosić `EAST`.
-    * Dla kierunków `FORWARD` i `BACKWARD` zmienia pozycję zwierzęcia o 1 pole, uwzględniając jego orientację, np. kiedy zwierzę
-      jest na pozycji `(2,2)` i jego orientacja to `NORTH`, to po ruchu `FORWARD` jego pozycja to `(2,3)`.
-    * **Uniemożliwia** wyjechanie poza mapę, która ustalona jest od pozycji `(0,0)` do pozycji `(4,4)` (pięć na pięć pól). W
-      sytuacji, w której zwierzę miałoby wyjść poza mapę, wywołanie `move` nie ma żadnego skutku.
+4. Uzupełnij brakującą logikę w `RectangularMap` zgodnie z wytycznymi:
 
-### Zastosowanie list
+    * definiuje prostokątną mapę - posiada szerokość oraz wysokość,
+    * implementuje interfejs `WorldMap`,
+    * w konstruktorze akceptuje dwa parametry `width` oraz `height` wskazujące szerokość oraz wysokość mapy (możesz założyć
+      że otrzymane wartości są poprawne),
+    * umożliwia poruszanie się w obrębie zdefiniowanego prostokąta (jak w laboratorium 3),
+    * umożliwia występowanie więcej niż jednego zwierzęcia na mapie,
+    * uniemożliwia występowanie więcej niż jednego zwierzęcia na tej samej pozycji,
+    * posiada metodę `toString` rysującą aktualną konfigurację mapy (wykorzystaj klasę `MapVisualizer`, która znajduje się
+      w tym katalogu).
 
-1. Zmodyfikuj klasę `OptionsParser` w taki sposób, by zamiast tablicy `MoveDirection[]` zwracała kolekcję `List<MoveDirection>`. Zastanów się, w jaki sposób dokonać tutaj zmian by maksymalnie uprościć kod i nie zmieniać zachowania metody (niepoprawne opcje nadal powinny być pomijane!).
-2. Zmodyfikuj miejsca w kodzie oraz testy, które korzystały z `OptionsParser` tak, by program się kompilował. Upewnij się, że testy nadal przechodzą.
+      **Pamiętaj by zaimplementować wszystkie metody narzucone przez interfejs!**
 
-###  Tworzenie symulacji
+5. Zmodyfikuj klasę `Animal`:
+
+    * metoda `move()` powinna od teraz przyjmować `MoveValidator` i używać go do sprawdzania, czy zwierzę może zmienić swoją pozycję na wcześniej wyliczoną. Wykorzystaj ten argument podczas realizacji ruchu w metodzie `RectangularMap.move()`.
+    * zmodyfikuj metodę `toString` tak, by zwracała jedynie schematyczną orientację zwierzęcia w postaci łańcucha składającego się z jednego znaku, Np. jeśli zwierzę ma orientację północną, to metoda `toString()` powinna zwracać łańcuch "N" albo "^".
+
+6. Zmodyfikuj klasę `Simulation` tak, by przyjmowała w konstruktorze również obiekt `WorldMap`. Następnie popraw realizację metody `run()` tak, by ruch odbywał się za pośrednictwem mapy. Po każdym ruchu wypisz aktualny stan mapy.
+7. Dodaj testy integracyjne weryfikujące, że implementacja jest poprawna.
 
 
-1. W pakiecie `agh.ics.oop` stwórz klasę `Simulation`.
 
-2. Klasa powinna przyjmować w konstruktorze listę pozycji początkowych zwierząt (`List<Vector2d>`) oraz listę ruchów (`List<MoveDirection>`). Na podstawie pozycji początkowych stwórz listę zwierząt, które będzie przechowywać obiekt symulacji.
+## Zadanie dodatkowe
 
-3. W klasie `Simulation` zdefiniuj również metodę `run()`, która na przemian steruje ruchem wszystkich zwierząt. Przykładowo, jeśli użytkownik wprowadzi ciąg: `f b r l`, a na mapie są dwa zwierzęta, to pierwsze zwierzę otrzyma ruchy `f` i `r`, a drugie `b` i `l`. Ruchy obu zwierząt mają być wykonywane na przemian, tzn. po każdym ruchu pierwszego zwierzęcia następuje ruch drugiego zwierzęcia.
+Interfejs `WorldMap` zakłada, że mapa może przechowywać jedynie zwierzęta, a pozycje zawsze wyrażone są jako dwuwymiarowe wektory. Te założenia można poluzować, wprowadzając parametryzację i typy generyczne.
 
-4. Zapewnij by po każdym ruchu program wypisywał informację `Zwierzę i : (x ,y)`, gdzie `i`- numer zwierzęcia na liście, `x`,`y` - pozycja zwierzęcia po ruchu (skorzystaj z przygotowanego wcześniej `toString()`).
+**Uwaga: to zadanie najlepiej robić na osobnym branchu i nie scalać go z `main` - może być trudne w utrzymaniu przy kolejnych laborkach. Najlepiej zacząć realizację zadania od stworzenia brancha `lab4-bonus` z brancha `lab4` (z miejsca, gdzie podstawowa część laborki jest już gotowa). W celu oddania zadania bonusowego wystarczy wtedy utworzyć pull request z `lab4-bonus` do `lab4`**
 
-5. W celu weryfikacji rozwiązania wykonaj następujący kod w metodzie `main` klasy `World`:
-   ```java
-   List<MoveDirection> directions = OptionsParser.parse(args);
-   List<Vector2d> positions = List.of(new Vector2d(2,2), new Vector2d(3,4));
-   Simulation simulation = new Simulation(positions, directions);
-   simulation.run();
-   ```
-
-   Sprawdź, czy zwierzęta poruszają się poprawnie dla ciągu: `f b r l f f r r f f f f f f f f`.
-
-6. Napisz testy integracyjne weryfikujące poprawność implementacji. Uwzględnij:
-    * czy zwierzę ma właściwą orientację,
-    * czy zwierzę przemieszcza się na właściwe pozycje,
-    * czy zwierzę nie wychodzi poza mapę,
-    * czy dane wejściowe podane jako tablica łańcuchów znaków są poprawnie interpretowane.
-
-7. Po realizacji zadania zastanów się, której implementacji listy w Javie najlepiej użyć w przypadkach opisanych w naszych zadaniach. W razie potrzeby podmień implementację na inną i uzasadnij odpowiedź (w formie komentarza w kodzie lub komentarza w PR).
-
-
+1. Zmodyfikuj interfejs `WorldMap` tak, by mapa mogła przechowywać dowolne obiekty `T` na pozycjach typu `P`. Deklaracja typu powinna wyglądać tak: `WorldMap<T, P>`. Dostosuj do tego założenia wszystkie metody w interfejsie.
+2. Popraw klasę `RectangularMap` tak, by implementowała interfejs z odpowiednimi parametrami typów.
+3. Popraw `Simulation` tak, by przyjmowało od teraz dowolne mapy obiektów z dowolnymi pozycjami.
+   **Uwaga:** być może konieczna będzie w tym celu modyfikacja konstruktora `Simulation`. Zastanów się, jakie parametry powinien przyjmować ten konstruktor i gdzie powinna znajdować się inicjalizacja zwierzaków po zmianach.
+4. Stwórz dodatkową implementację `TextMap`, która będzie przechowywała napisy `String` na pozycjach określonych w jednym wymiarze (liczba całkowita). Deklaracja typu dla takiej mapy to `WorldMap<String, Integer>`. Mapa powinna spełniać założenia:
+    - Mapa nie ma górnej granicy - dokładanie nowego napisu zawsze wstawia go na koniec mapy.
+    - Przemieszczanie napisu jest możliwe jedynie w obecnych granicach `<0, N-1>` (gdzie `N` - liczba elementów w mapie). Przesuwany napis zamienia się miejscami z sąsiadem - w przypadku ruchu "na wschód" z sąsiadem z prawej (o indeksie o 1 wyższym), a "na zachód" z lewej. Np. dla mapy `["Ala", "ma", "sowoniedźwiedzia"]` przesunięcie napisu `"ma"` na wschód powinno dać efekt: `["Ala", "sowoniedźwiedzia", "ma"]`. Dalsze przemieszczanie wyrazu `"ma"` w prawo nie jest już możliwe.
+    - Napis może się przemieszczać do przodu i tyłu. Można założyć, że przemieszczenie do przodu następuje po podaniu parametru `FORWARD` lub `RIGHT`, a do tyłu po podaniu `BACKWARD` lub `LEFT`.
+5. Przetestuj nową implementację mapy tworząc dodatkową symulację `Simulation<String, Integer>` w metodzie `main()`. Możesz wykorzystać te same parametry ruchu, co w przypadku symulacji zwierząt oraz dowolnie przyjęty zestaw napisów.
+6. Dodaj do systemu dodatkowy interfejs `WorldNumberPositionMap`. Interfejs powinien rozszerzać `WorldMap` i tak definiować typy generyczne by obsługiwać obiekty dowolnych typów `T`, ale na pozycjach wyrażonych dowolnymi typami liczbowymi (`Integer`, `Double`, `Long`, itp). Popraw definicję `TextMap` tak by realizowała interfejs `WorldNumberPositionMap`.
+   **Wskazówka**: wszystkie liczbowe typy kopertowe rozszerzają klasę `Number`.
 
 ## Przydatne informacje
 
-* Początkowe wartości obiektu można określić albo w konstruktorze, albo bezpośrednio przypisując je do pól, np.
+* Mechanizm interfejsów pozwala na określenie pewnego zestawu metod, które muszą być implementowane przez określony typ.
+  Interfejs `WorldMap` jest tego przykładem - określa on sposób interakcji mapy ze zwierzętami oraz klasą `MapVisualizer`. Zarówno interfejsy, jak i klasa są do pobrania z folderu z konspektem - wykorzystasz je w swoim projekcie.
+
+* Interfejs określa jedynie, że dana klasa ma posiadać określoną metodę - dlatego w interfejsie nie ma implementacji - wszystkie metody są
+  z założenia abstrakcyjne (można pominąć modyfikator `abstract`).
+
+* W interfejsie wszystkie metody są z założenia publiczne, dlatego nie ma potrzeby dodania modyfikatora dostępu
+  `public`. Od Javy 9 interfejs może posiadać także metody prywatne. Od Javy 8 interfejsy mogą posiadać metody statyczne (takie same jak metody statyczne w klasach) oraz metody domyślne (oznaczane modyfikatorem `default`), które posiadają implementację.
+
+* Podstawianie obiektów realizujących interfejs pod deklaracje metod i zmiennych wymagających interfejsu jest możliwe, bo w Javie działa **polimorfizm**. Przykładowo:
 
   ```java
-  class Animal {
-    private Vector2d position = new Vector2d(2,2);
+  MoveValidator validator = new RectangularMap(10, 10); // RectangularMap pośrednio realizuje MoveValidator 
+  validator.canMoveTo(new Vector2d(1, 2)); // wywołanie poprawne, Java wywoła implementację metody z RectangularMap
+  // validator.place(animal);  wywołanie niepoprawne, kod się NIE skompiluje! MoveValidator nie ma metody place()
+  ```
+
+* Klasa deklaruje fakt implementacji interfejsu za pomocą słowa kluczowego `implements`, np.
+
+  ```java
+  class RectangularMap implements WorldMap {
   }
   ```
-* W Javie istnieją dwie podstawowe struktury sekwencyjne (poza tablicami): [LinkedList](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedList.html) oraz [ArrayList](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html). W przeciwieństwie do tablic, obie klasy pozwalają na określenie początkowego rozmiaru na 0 i dowolne rozszerzanie kolekcji.
-* Obie klasy implementują interfejs `List`, który definiuje podstawowe operacje na listach.
-* Klasy te różnią się implementację - `LinkedList` oparta jest o listę dwukierunkową, przez co operacje dodawania i usuwania elementów są szybkie, ale swobodny dostęp za pomocą operatora `get` jest wolniejszy. `ArrayList` oparta jest o tablicę, dlatego dostęp jest szybki, ale dodawanie i usuwanie elementów jest wolniejsze.
-* W Javie występują typy parametryzowane i typ `List` jest tego przykładem. Taki typ jest podobny do szablonów w C++. Wymaga on podania innego typu (lub typów) jako parametru (parametr musi być typem obiektowym):
+
+* Interfejs `Map` definiuje w Javie strukturę słownikową, czyli mapę odwzorowującą *klucze* na *wartości*.
+
+* Jedną z najczęściej wykorzystywanych implementacji interfejsu `Map` jest klasa `HashMap`, przykładowo:
+
     ```java
-    List<Animal> animals = new ArrayList<>();
+    Map<Vector2d, Animal> animals = new HashMap<>();
     ```
-  W tym przykładzie tworzona jest lista zwierząt, a jako implementacja wybrana została klasa `ArrayList`. Dzięki temu
-  wywołania takie jak:
+
+* Poprawne działanie `HashMap` uzależnione jest od implementacji metod `equals` oraz `hashCode` w klasie, która stanowi
+  klucze mapy (w ćwiczeniu dotyczy to klasy `Vector2d`).
+
+* Wynik działania metody `hashCode` musi być zgodny z wynikiem działania metody `equals`, tzn. jeśli dwa obiekty są
+  równe według `equals`, to ich `hashCode` musi być równy.
+
+* Przykładowa implementacja metody `hashCode` dla klasy `Vector2d` może wyglądać następująco:
+
     ```java
-    animals.get(1);
+    @Override
+    public int hashCode() {
+      return Objects.hash(this.x, this.y);
+    }
     ```
-  zwracają obiekty klasy `Animal`, dzięki czemu mogą one być używane w "bezpieczny" sposób - tzn. kompilator może sprawdzić,
-  czy wywoływane metody faktycznie występują w klasie `Animal`.
+
+* Używanie mapy nie wymaga jawnego wywoływania metody `hashCode`, ale jest ona używana wewnętrznie dla potrzeb optymalizacji.
+  Istotą funkcji jest fakt, że dla identycznych wartości `x` i `y` wartość funkcji `hashCode` będzie identyczna.
