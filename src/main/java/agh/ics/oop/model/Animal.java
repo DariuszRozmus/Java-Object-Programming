@@ -24,6 +24,10 @@ public class Animal {
         return direction;
     }
 
+    public Vector2d getPosition() {
+        return position;
+    }
+
     public void move(MoveDirection direction) {
         switch (direction) {
             case FORWARD-> {
