@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class RectangularMap implements WorldMap {
 
-    private final Map<Vector2d, List<Animal>> animals;
+    private final Map<Vector2d, Animal> animals;
     private final Vector2d DOWNCORNER = new Vector2d(0, 0);
     private final Vector2d UPCORNER;
     private final MapVisualizer mapVisualizer;
@@ -24,52 +24,51 @@ public class RectangularMap implements WorldMap {
     @Override
     public boolean place(Animal animal) {
         if(UPCORNER.follows(animal.getPosition()) && DOWNCORNER.precedes(animal.getPosition())) {
-            animals.computeIfAbsent(animal.getPosition(), x -> new ArrayList<>()).add(animal);
+            animals.put(animal.getPosition(), animal);
             return true;
         }
         return false;
     }
 
-    private void removeAnimal(Animal animal, Vector2d position) {
-        List<Animal> animalList = animals.get(position);
-        if(animalList != null) {
-            animalList.remove(animal);
-            if(animalList.isEmpty()) {
-                animals.remove(animal.getPosition());
-            }
-        }
-    }
-
-    private void addAnimal(Animal animal) {
-        animals.computeIfAbsent(animal.getPosition(), x -> new ArrayList<>()).add(animal);
-    }
+//    private void removeAnimal(Animal animal, Vector2d position) {
+//        List<Animal> animalList = animals.get(position);
+//        if(animalList != null) {
+//            animalList.remove(animal);
+//            if(animalList.isEmpty()) {
+//                animals.remove(animal.getPosition());
+//            }
+//        }
+//    }
+//
+//    private void addAnimal(Animal animal) {
+//        animals.computeIfAbsent(animal.getPosition(), x -> new ArrayList<>()).add(animal);
+//    }
 
     @Override
     public void move(Animal animal, MoveDirection direction) {
         if (animals.containsKey(animal.getPosition())) {
             var oldPosition = animal.getPosition();
-            animal.move(direction);
-            removeAnimal(animal, oldPosition);
-            addAnimal(animal);
+            animal.move(direction,this);
+            if (!oldPosition.equals(animal.getPosition())) {
+                animals.remove(oldPosition);
+                animals.put(animal.getPosition(), animal);
+            }
         }
     }
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        return false;
+        return animals.containsKey(position);
     }
 
     @Override
     public Animal objectAt(Vector2d position) {
-        return null;
+        return isOccupied(position) ? animals.get(position) : null;
     }
 
     @Override
     public boolean canMoveTo(Vector2d position) {
-        if(UPCORNER.follows(position) && DOWNCORNER.precedes(position)) {
-            return true;
-        }
-        return false;
+        return UPCORNER.follows(position) && DOWNCORNER.precedes(position);
     }
     @Override
     public String toString() {

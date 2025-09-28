@@ -1,6 +1,7 @@
 package agh.ics.oop;
 
 import agh.ics.oop.model.MoveDirection;
+import agh.ics.oop.model.MoveValidator;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.Animal;
 import java.util.ArrayList;
@@ -36,12 +37,12 @@ public class Simulation {
         return moves;
     }
 
-    public void run(){
+    public void run(MoveValidator validator){
         for(Vector2d position: positions) {
             animals.add(new Animal((Vector2d) position));
         }
         for (int i=0; i < moves.size(); i++) {
-            animals.get(i%positions.size()).move(moves.get(i));
+            animals.get(i%positions.size()).move(moves.get(i),validator);
             System.out.println("Zwierze"+i+":"+animals.get(i%positions.size()));
         }
     }
