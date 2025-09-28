@@ -66,6 +66,13 @@ public class RectangularMap implements WorldMap {
 
     @Override
     public boolean canMoveTo(Vector2d position) {
+        if(UPCORNER.follows(position) && DOWNCORNER.precedes(position)) {
+            return true;
+        }
         return false;
+    }
+    @Override
+    public String toString() {
+        return mapVisualizer.draw(DOWNCORNER, UPCORNER);
     }
 }
