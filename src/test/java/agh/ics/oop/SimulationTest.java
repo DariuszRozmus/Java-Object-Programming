@@ -2,6 +2,7 @@ package agh.ics.oop;
 
 import agh.ics.oop.model.Animal;
 import agh.ics.oop.model.MoveDirection;
+import agh.ics.oop.model.RectangularMap;
 import agh.ics.oop.model.Vector2d;
 import org.junit.jupiter.api.Test;
 
@@ -20,8 +21,9 @@ public class SimulationTest {
         List<Vector2d> positions = List.of(new Vector2d(2,2), new Vector2d(3,4));
 
         //when
-        Simulation simulation = new Simulation(positions, directions);
-        simulation.run();
+        RectangularMap rectangularMap = new RectangularMap(10,10);
+        Simulation simulation = new Simulation(positions, directions, rectangularMap);
+        simulation.run(rectangularMap);
 
         //then
         List<Animal> animals = simulation.getAnimals();

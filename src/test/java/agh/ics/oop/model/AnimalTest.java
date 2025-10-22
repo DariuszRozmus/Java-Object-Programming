@@ -14,10 +14,11 @@ public class AnimalTest {
         Animal animal5 = new Animal();
 
         //when
-        animal1.move(MoveDirection.FORWARD);
-        animal2.move(MoveDirection.BACKWARD);
-        animal3.move(MoveDirection.LEFT);
-        animal4.move(MoveDirection.RIGHT);
+        RectangularMap rectangularMap = new RectangularMap(10,10);
+        animal1.move(MoveDirection.FORWARD, rectangularMap);
+        animal2.move(MoveDirection.BACKWARD, rectangularMap);
+        animal3.move(MoveDirection.LEFT, rectangularMap);
+        animal4.move(MoveDirection.RIGHT, rectangularMap);
         animal5.isAt((new Vector2d(2,2)));
 
         //then

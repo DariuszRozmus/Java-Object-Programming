@@ -1,5 +1,7 @@
 package agh.ics.oop.model;
 
+import static agh.ics.oop.model.MapDirection.*;
+
 public class Animal {
 
     private MapDirection direction;
@@ -9,7 +11,7 @@ public class Animal {
 
     public Animal(Vector2d position) {
         this.position = position;
-        this.direction = MapDirection.NORTH;
+        this.direction = NORTH;
     }
 
     public Animal() {
@@ -24,19 +26,19 @@ public class Animal {
         return direction;
     }
 
-    public void move(MoveDirection direction) {
+    public Vector2d getPosition() {
+        return position;
+    }
+
+    public void move(MoveDirection direction, MoveValidator validator) {
         switch (direction) {
-            case FORWARD-> {
-                Vector2d newposition = this.position.add(this.direction.toUnitVector());
-                if(UPCORNER.follows(newposition) && DOWNCORNER.precedes(newposition))
-                    this.position = this.position.add(this.direction.toUnitVector());
-                System.out.println(this.position);
+            case FORWARD -> {
+                Vector2d newPosition = position.add(this.direction.toUnitVector());
+                this. position = validator.canMoveTo(newPosition) ? newPosition : position;
             }
-            case BACKWARD-> {
-                Vector2d newposition = this.position.subtract(this.direction.toUnitVector());
-                if(UPCORNER.follows(newposition) && DOWNCORNER.precedes(newposition))
-                    this.position = this.position.subtract(this.direction.toUnitVector());
-                System.out.println(this.position);
+            case BACKWARD -> {
+                Vector2d newPosition = position.subtract(this.direction.toUnitVector());
+                this. position = validator.canMoveTo(newPosition) ? newPosition : position;
             }
             case LEFT -> this.direction = this.direction.previous();
             case RIGHT -> this.direction = this.direction.next();
@@ -45,6 +47,11 @@ public class Animal {
 
     @Override
     public String toString() {
-        return String.format("Animal[%s,%s]",direction,position);
+        return switch (direction) {
+            case NORTH -> "^";
+            case SOUTH -> "v";
+            case EAST -> ">";
+            case WEST -> "<";
+        };
     }
 }
