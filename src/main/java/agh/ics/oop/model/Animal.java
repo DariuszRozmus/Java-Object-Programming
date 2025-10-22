@@ -34,11 +34,11 @@ public class Animal {
         switch (direction) {
             case FORWARD -> {
                 Vector2d newPosition = position.add(this.direction.toUnitVector());
-                this. position = validator.canMoveTo(newPosition) ? position : newPosition;
+                this. position = validator.canMoveTo(newPosition) ? newPosition : position;
             }
             case BACKWARD -> {
                 Vector2d newPosition = position.subtract(this.direction.toUnitVector());
-                this. position = validator.canMoveTo(newPosition) ? position : newPosition;
+                this. position = validator.canMoveTo(newPosition) ? newPosition : position;
             }
             case LEFT -> this.direction = this.direction.previous();
             case RIGHT -> this.direction = this.direction.next();
