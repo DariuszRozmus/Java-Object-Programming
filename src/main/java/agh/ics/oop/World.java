@@ -15,9 +15,9 @@ public class World {
         System.out.println("system wystartowal");
         OptionsParser parser = new OptionsParser();
         List<MoveDirection> directions = parser.parse(args);
-        List<Vector2d> positions = List.of(new Vector2d(2,2));
-        Simulation simulation = new Simulation(positions, directions);
+        List<Vector2d> positions = List.of(new Vector2d(2,2), new Vector2d(3,3), new Vector2d(4,4));
         RectangularMap rectangularMap = new RectangularMap(10,10);
+        Simulation simulation = new Simulation(positions, directions, rectangularMap);
         simulation.run(rectangularMap);
         simulation.showAnimals();
         simulation.showMoves();

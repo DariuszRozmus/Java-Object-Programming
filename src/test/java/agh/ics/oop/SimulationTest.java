@@ -21,8 +21,8 @@ public class SimulationTest {
         List<Vector2d> positions = List.of(new Vector2d(2,2), new Vector2d(3,4));
 
         //when
-        Simulation simulation = new Simulation(positions, directions);
         RectangularMap rectangularMap = new RectangularMap(10,10);
+        Simulation simulation = new Simulation(positions, directions, rectangularMap);
         simulation.run(rectangularMap);
 
         //then
