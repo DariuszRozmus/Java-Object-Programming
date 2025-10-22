@@ -1,9 +1,8 @@
 package agh.ics.oop;
 
-import agh.ics.oop.model.MoveDirection;
-import agh.ics.oop.model.MoveValidator;
-import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.Animal;
+import agh.ics.oop.model.*;
+import agh.ics.oop.model.util.MapVisualizer;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +11,14 @@ public class Simulation {
     private List<MoveDirection> moves;
     private List<Vector2d> positions;
     private List<Animal> animals = new ArrayList<>();
+    private WorldMap worldMap;
+//    private MapVisualizer mapVisualizer;
 
-    public Simulation(List<Vector2d> positions, List<MoveDirection> moves) {
+    public Simulation(List<Vector2d> positions, List<MoveDirection> moves, WorldMap worldMap) {
         this.moves = moves;
         this.positions = positions;
+        this.worldMap = worldMap;
+//        this.mapVisualizer = new MapVisualizer(worldMap);
     }
 
     public void showAnimals(){
