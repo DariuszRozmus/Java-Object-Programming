@@ -42,11 +42,16 @@ public class Simulation {
 
     public void run(MoveValidator validator){
         for(Vector2d position: positions) {
-            animals.add(new Animal((Vector2d) position));
+            Animal animal = new Animal(position);
+            animals.add(animal);
+//            boolean bool = this.worldMap.place(new Animal((Vector2d) positions));
+            worldMap.place(animal);
         }
         for (int i=0; i < moves.size(); i++) {
-            animals.get(i%positions.size()).move(moves.get(i),validator);
-            System.out.println("Zwierze"+i+":"+animals.get(i%positions.size()));
+//            animals.get(i%positions.size()).move(moves.get(i),this.worldMap);
+            worldMap.move(animals.get(i % animals.size()), moves.get(i));
+            System.out.println("Zwierze nr "+i % animals.size()+":"+moves.get(i));
+            System.out.println(worldMap);
         }
     }
 }
