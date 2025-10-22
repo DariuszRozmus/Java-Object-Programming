@@ -2,7 +2,7 @@ package agh.ics.oop.model;
 
 import static agh.ics.oop.model.MapDirection.*;
 
-public class Animal {
+public class Animal implements WorldElement{
 
     private MapDirection direction;
     private Vector2d position;
