@@ -6,15 +6,14 @@ import java.util.Map;
 
 abstract class AbstractWorldMap implements WorldMap {
 
-    private final Map<Vector2d, Animal> animals;
-    private final Vector2d DOWNCORNER = new Vector2d(0, 0);
-    private Vector2d UPCORNER;
-    private final MapVisualizer mapVisualizer;
+    protected final Map<Vector2d, Animal> animals;
+    protected final Vector2d DOWNCORNER = new Vector2d(0, 0);
+    protected Vector2d UPCORNER;
+    protected final MapVisualizer mapVisualizer;
 
-    protected AbstractWorldMap(Map<Vector2d, Animal> animals, Vector2d upcorner, MapVisualizer mapVisualizer) {
+    protected AbstractWorldMap(Map<Vector2d, Animal> animals) {
         this.animals = animals;
-        this.UPCORNER = upcorner;
-        this.mapVisualizer = mapVisualizer;
+        this.mapVisualizer = new MapVisualizer(this);
     }
 
     public boolean place(Animal animal) {
@@ -40,11 +39,13 @@ abstract class AbstractWorldMap implements WorldMap {
         return animals.containsKey(position);
     }
 
-    public Animal objectAt(Vector2d position) {
-        return isOccupied(position) ? animals.get(position) : null;
+    public WorldElement objectAt(Vector2d position) {
+        return animals.getOrDefault(position, null);
     }
 
-    public abstract boolean canMoveTo(Vector2d position);
+    public boolean canMoveTo(Vector2d position) {
+        return UPCORNER.follows(position) && DOWNCORNER.precedes(position);
+    }
 
     public String toString() {
         return mapVisualizer.draw(DOWNCORNER, UPCORNER);
