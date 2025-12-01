@@ -7,7 +7,7 @@ import java.util.*;
 public class RectangularMap extends AbstractWorldMap {
 
     public RectangularMap(Vector2d upcorner) {
-        super(new HashMap<Vector2d, WorldElement>());
+        super(new HashMap<Vector2d, Animal>());
         this.UPCORNER = upcorner;
     }
 }
