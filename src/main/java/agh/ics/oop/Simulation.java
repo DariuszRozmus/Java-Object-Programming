@@ -50,7 +50,7 @@ public class Simulation {
         for (int i=0; i < moves.size(); i++) {
 //            animals.get(i%positions.size()).move(moves.get(i),this.worldMap);
             worldMap.move(animals.get(i % animals.size()), moves.get(i));
-            System.out.println("Zwierze nr "+i % animals.size()+":"+moves.get(i));
+            System.out.println("Zwierze nr "+i % animals.size()+":"+moves.get(i)+" pozycja: "+animals.get(i%animals.size()).getPosition());
             System.out.println(worldMap);
         }
     }

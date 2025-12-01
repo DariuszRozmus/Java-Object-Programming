@@ -79,6 +79,7 @@ public class MapVisualizer {
             if (object != null) {
                 return object.toString();
             }
+            System.out.println("NOT EMPYT"+currentPosition);
         }
         return EMPTY_CELL;
     }
