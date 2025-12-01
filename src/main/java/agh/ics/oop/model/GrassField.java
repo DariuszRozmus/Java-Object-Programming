@@ -40,4 +40,26 @@ public class GrassField extends AbstractWorldMap{
 //    public List<WorldElement> getElements() {
 //
 //    }
+    public boolean isOccupied(Vector2d position) {
+        if(super.isOccupied(position)) {
+            return true;
+        }else {
+            return grasses.get(position) != null;
+        }
+    }
+
+    private Vector2d upperRight() {
+        Vector2d corner = new Vector2d(0, 0);
+        for (Vector2d position : grasses.keySet()) {
+            corner =corner.upperRight(position);
+        }
+        for (Vector2d position : animals.keySet()) {
+            corner =corner.upperRight(position);
+        }
+        return corner;
+    }
+    @Override
+    public String toString() {
+        return mapVisualizer.draw(DOWNCORNER, upperRight());
+    }
 }
