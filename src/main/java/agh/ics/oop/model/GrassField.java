@@ -2,10 +2,8 @@ package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.MapVisualizer;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
+import java.util.stream.Stream;
 
 import static java.lang.Math.sqrt;
 
@@ -25,21 +23,15 @@ public class GrassField extends AbstractWorldMap{
         RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(maxWidth, maxHeight, grassCount);
         for (Vector2d position : randomPositionGenerator) {
             grasses.put(position, new Grass(position));
-            System.out.println("Pozycja grass: "+position);
         }
     }
-// Jeśli nadpisujemy metodę, to dobrze użyć super.metodaAbstractClassy
+
     @Override
     public WorldElement objectAt(Vector2d position) {
         WorldElement animal = super.objectAt(position);
         return animal != null ? animal: grasses.get(position);
     }
-    // TODO Nadpisać getElements (stworzyć XD)
 
-//    @Override
-//    public List<WorldElement> getElements() {
-//
-//    }
     public boolean isOccupied(Vector2d position) {
         if(super.isOccupied(position)) {
             return true;
@@ -57,6 +49,13 @@ public class GrassField extends AbstractWorldMap{
             corner =corner.upperRight(position);
         }
         return corner;
+    }
+
+    @Override
+    public Collection<WorldElement> getElements() {
+        var listOfAnimals = super.getElements();
+        var listOfGrass = new ArrayList<>(grasses.values());
+        return Stream.concat(listOfAnimals.stream(), listOfGrass.stream()).toList();
     }
     @Override
     public String toString() {
