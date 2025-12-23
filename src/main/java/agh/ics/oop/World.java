@@ -11,7 +11,8 @@ public class World {
     public static void main(String[] args) {
         System.out.println("system wystartowal");
         OptionsParser parser = new OptionsParser();
-        List<MoveDirection> directions = parser.parse(args);
+        String[] arguments = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f"};
+        List<MoveDirection> directions = parser.parse(arguments);
         List<Vector2d> positions = List.of(new Vector2d(2,2), new Vector2d(3,3), new Vector2d(4,4));
         WorldMap Map = new GrassField(10);
         Simulation simulation = new Simulation(positions, directions, Map);
