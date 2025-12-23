@@ -1,112 +1,104 @@
-# Lab 4: Interfejsy i mapy
+# Lab 6: Refactoring kodu
 
-Celem laboratorium jest zapoznanie się z mechanizmem interfejsów oraz specjalnym typem struktury danych do przechowywania wielu obiektów - mapą.
+Celem laboratorium jest zapoznanie się z różnymi metodami usprawniania kodu (*refactoringu*) bez wprowadzania nowych funkcji. Wprowadzimy mechanizm wyjątków, a także zapoznamy się z przydatnymi wzorcami projektowymi, takimi jak metoda szablonowa czy obserwator.
 
 Najważniejsze zadania:
 
-1. Stworzenie klasy `RectangularMap` do przechowywania wielu zwierząt i ich pozycji z wykorzystaniem `HashMap`.
-2. Zabezpieczenie kontraktów między mapą a zwierzęciem.
-3. Konsolowa wizualizacja mapy podczas symulacji.
-4. Testy integracyjne.
-
-## Zadania do wykonania
-
-1. Przyjrzyj się interfejsom `WorldMap` oraz `MoveValidator`, które znajdują się w katalogu z tym konspektem i skopiuj je do swojego projektu. Skopiuj także klasę `MapVisualizer` - wykorzystasz ją w dalszych zadaniach. Umieść wszystkie klasy w odpowiednich pakietach, zgodnie z deklaracjami w ich nagłówkach.
-
-2. W pakiecie `agh.ics.oop.model` zdefiniuj klasę `RectangularMap`.
-
-3. Podstawowym atrybutem klasy `RectangularMap` powinna być struktura przechowująca zwierzęta na ich pozycjach. Do realizacji takiego odwzorowania wykorzystaj mapę (słownik). Z każdą aktualną pozycją zwierzęcia (`Vector2d`) powiążesz obiekt `Animal`. Deklaracja typu takiego atrybutu powinna wyglądać tak: `Map<Vector2d, Animal> animals = new HashMap<>();`.
-
-4. Uzupełnij brakującą logikę w `RectangularMap` zgodnie z wytycznymi:
-
-    * definiuje prostokątną mapę - posiada szerokość oraz wysokość,
-    * implementuje interfejs `WorldMap`,
-    * w konstruktorze akceptuje dwa parametry `width` oraz `height` wskazujące szerokość oraz wysokość mapy (możesz założyć
-      że otrzymane wartości są poprawne),
-    * umożliwia poruszanie się w obrębie zdefiniowanego prostokąta (jak w laboratorium 3),
-    * umożliwia występowanie więcej niż jednego zwierzęcia na mapie,
-    * uniemożliwia występowanie więcej niż jednego zwierzęcia na tej samej pozycji,
-    * posiada metodę `toString` rysującą aktualną konfigurację mapy (wykorzystaj klasę `MapVisualizer`, która znajduje się
-      w tym katalogu).
-
-      **Pamiętaj by zaimplementować wszystkie metody narzucone przez interfejs!**
-
-5. Zmodyfikuj klasę `Animal`:
-
-    * metoda `move()` powinna od teraz przyjmować `MoveValidator` i używać go do sprawdzania, czy zwierzę może zmienić swoją pozycję na wcześniej wyliczoną. Wykorzystaj ten argument podczas realizacji ruchu w metodzie `RectangularMap.move()`.
-    * zmodyfikuj metodę `toString` tak, by zwracała jedynie schematyczną orientację zwierzęcia w postaci łańcucha składającego się z jednego znaku, Np. jeśli zwierzę ma orientację północną, to metoda `toString()` powinna zwracać łańcuch "N" albo "^".
-
-6. Zmodyfikuj klasę `Simulation` tak, by przyjmowała w konstruktorze również obiekt `WorldMap`. Następnie popraw realizację metody `run()` tak, by ruch odbywał się za pośrednictwem mapy. Po każdym ruchu wypisz aktualny stan mapy.
-7. Dodaj testy integracyjne weryfikujące, że implementacja jest poprawna.
+1. Walidacja danych przy użyciu mechanizmu wyjątków.
+2. Zastosowanie wzorca `template method` do wyliczania granic mapy.
+3. Zastosowanie rekordów do tworzenia kontenerów na dane.
+4. Zastosowanie wzorca `Observer`.
 
 
 
-## Zadanie dodatkowe
 
-Interfejs `WorldMap` zakłada, że mapa może przechowywać jedynie zwierzęta, a pozycje zawsze wyrażone są jako dwuwymiarowe wektory. Te założenia można poluzować, wprowadzając parametryzację i typy generyczne.
+## Zadania do wykonania (4xp)
 
-**Uwaga: to zadanie najlepiej robić na osobnym branchu i nie scalać go z `main` - może być trudne w utrzymaniu przy kolejnych laborkach. Najlepiej zacząć realizację zadania od stworzenia brancha `lab4-bonus` z brancha `lab4` (z miejsca, gdzie podstawowa część laborki jest już gotowa). W celu oddania zadania bonusowego wystarczy wtedy utworzyć pull request z `lab4-bonus` do `lab4`**
+### Obsługa błędów
 
-1. Zmodyfikuj interfejs `WorldMap` tak, by mapa mogła przechowywać dowolne obiekty `T` na pozycjach typu `P`. Deklaracja typu powinna wyglądać tak: `WorldMap<T, P>`. Dostosuj do tego założenia wszystkie metody w interfejsie.
-2. Popraw klasę `RectangularMap` tak, by implementowała interfejs z odpowiednimi parametrami typów.
-3. Popraw `Simulation` tak, by przyjmowało od teraz dowolne mapy obiektów z dowolnymi pozycjami.
-   **Uwaga:** być może konieczna będzie w tym celu modyfikacja konstruktora `Simulation`. Zastanów się, jakie parametry powinien przyjmować ten konstruktor i gdzie powinna znajdować się inicjalizacja zwierzaków po zmianach.
-4. Stwórz dodatkową implementację `TextMap`, która będzie przechowywała napisy `String` na pozycjach określonych w jednym wymiarze (liczba całkowita). Deklaracja typu dla takiej mapy to `WorldMap<String, Integer>`. Mapa powinna spełniać założenia:
-    - Mapa nie ma górnej granicy - dokładanie nowego napisu zawsze wstawia go na koniec mapy.
-    - Przemieszczanie napisu jest możliwe jedynie w obecnych granicach `<0, N-1>` (gdzie `N` - liczba elementów w mapie). Przesuwany napis zamienia się miejscami z sąsiadem - w przypadku ruchu "na wschód" z sąsiadem z prawej (o indeksie o 1 wyższym), a "na zachód" z lewej. Np. dla mapy `["Ala", "ma", "sowoniedźwiedzia"]` przesunięcie napisu `"ma"` na wschód powinno dać efekt: `["Ala", "sowoniedźwiedzia", "ma"]`. Dalsze przemieszczanie wyrazu `"ma"` w prawo nie jest już możliwe.
-    - Napis może się przemieszczać do przodu i tyłu. Można założyć, że przemieszczenie do przodu następuje po podaniu parametru `FORWARD` lub `RIGHT`, a do tyłu po podaniu `BACKWARD` lub `LEFT`.
-5. Przetestuj nową implementację mapy tworząc dodatkową symulację `Simulation<String, Integer>` w metodzie `main()`. Możesz wykorzystać te same parametry ruchu, co w przypadku symulacji zwierząt oraz dowolnie przyjęty zestaw napisów.
-6. Dodaj do systemu dodatkowy interfejs `WorldNumberPositionMap`. Interfejs powinien rozszerzać `WorldMap` i tak definiować typy generyczne by obsługiwać obiekty dowolnych typów `T`, ale na pozycjach wyrażonych dowolnymi typami liczbowymi (`Integer`, `Double`, `Long`, itp). Popraw definicję `TextMap` tak by realizowała interfejs `WorldNumberPositionMap`.
-   **Wskazówka**: wszystkie liczbowe typy kopertowe rozszerzają klasę `Number`.
+1. W metodzie odpowiedzialnej za zamianę argumentów aplikacji na ruchy zwierzęcia rzuć wyjątek `IllegalArgumentException`, jeśli którykolwiek z parametrów nie należy do listy poprawnych parametrów (`f`, `forward`, `b`, `backward`, etc.). Jako przyczynę wyjątku wprowadź łańcuch znaków informujący, że określony parametr jest niepoprawny, np.  `new IllegalArgumentException(argument + " is not legal move specification")`.
+2. Stwórz własną klasę wyjątku - `IncorrectPositionException`. Powinien być to wyjątek typu **checked**. Wyjątek powinien przyjmować w konstruktorze `Vector2d` i tworzyć na jego podstawie wiadomość np. `Position (x, y) is not correct`.
+3. W metodach odpowiedzialnych za dodawanie elementów do mapy, jeśli dodanie elementu na wybrane pole jest niemożliwe, rzuć wyjątek `IncorrectPositionException`. Wyjątek zastępuje sygnalizowanie błędu przy pomocy zwracania wartości `false` (zmień sygnaturę metody).
+4. Obsłuż oba wyjątki. W przypadku błędów walidacji opcji program powinien zostać przerwany z odpowiednim komunikatem. W przypadku próby ustawiania zwierzątek na złych pozycjach w klasie `Simulation` powinny one być pominięte, ale program nadal ma działać i umożliwiać symulację dla poprawnie ustawionych zwierzątek.
+5. Zaktualizuj testy metody `place` oraz klasy `OptionsParser`, aby były zgodne z nowym kontraktem.
+
+### Metoda szablonowa
+
+1. Stwórz **rekord** `Boundary`, który będzie przechowywał dwie pozycje `Vector2d` - lewy dolny róg i prawy górny róg (opisujące prostokątny obszar).
+2. Dodaj do klasy `AbstractWorldMap` abstrakcyjną metodę `getCurrentBounds()`, która będzie zwracała obiekt `Boundary`.
+   **Uwaga:** możesz dodać tę metodę także do interfejsu `WorldMap`.
+3. Zaimplementuj metodę w obu realizacjach mapy, korzystając z istniejącego już kodu.
+4. Pozbądź się z obu realizacji mapy metody `toString()` oraz atrybutu `MapVisualizer` - przenieś je do klasy bazowej. W tym przypadku `toString()` powinno stać się metodą szablonową. Wykorzystaj w tym celu stworzoną wcześniej metodę `getCurrentBounds()`.
+
+### Obserwator (*observer* lub *listener*)
+
+1. Stwórz nowy interfejs `MapChangeListener`, zawierający jedną metodę: `void mapChanged(WorldMap worldMap, String message)`.
+
+2. Klasa `AbstractWorldMap` będzie naszym typem obserwowanym (*observable*). Dodaj do niej niezbędne elementy zgodnie ze wzorcem:
+
+    - Klasa powinna przechowywać listę swoich obserwatorów realizujących interfejs `MapChangeListener`.
+    - Klasa powinna umożliwiać rejestrowanie i wyrejestrowywanie obserwatorów.
+    - Umieszczenie zwierzęcia na mapie lub jego poruszenie powinno skutkować powiadomieniem wszystkich obserwatorów z podaniem opisu, co się wydarzyło (stwórz dodatkową metodę pomocniczą np. `mapChanged(String)` - powinna wywoływać metodę z interfejsu `MapChangeListener` na wszystkich zarejestrowanych obserwatorach).
+
+3. Stwórz klasę `ConsoleMapDisplay` - to będzie nasz pierwszy obserwator (*observer*). Kolejnych dodamy na późniejszych zajęciach. Klasa powinna:
+
+    - realizować interfejs `MapChangeListener`,
+    - w reakcji na zmianę mapy wypisywać kolejno:
+        - otrzymaną informację o operacji wykonanej na mapie,
+        - wizualną reprezentację otrzymanej mapy (`toString()`),
+        - sumaryczną liczbę wszystkich otrzymanych do tej pory aktualizacji (zdefiniuj odpowiedni atrybut).
+
+4. Zarejestruj `ConsoleMapDisplay` jako obserwatora dla tworzonej mapy - możesz to zrobić np. w klasie `World`.
+
+5. Pozbądź się wypisywania stanu mapy z klasy `Simulation`. Jeśli wszystko poszło ok, mapa i tak będzie się wypisywać po każdej zmianie pozycji!
+
+   Zastanów się, co nam daje takie rozwiązanie. W jaki sposób zastosowanie wzorca obserwator może wpłynąć korzystnie na dalsze rozwijanie naszego kodu?
+
+
 
 ## Przydatne informacje
 
-* Mechanizm interfejsów pozwala na określenie pewnego zestawu metod, które muszą być implementowane przez określony typ.
-  Interfejs `WorldMap` jest tego przykładem - określa on sposób interakcji mapy ze zwierzętami oraz klasą `MapVisualizer`. Zarówno interfejsy, jak i klasa są do pobrania z folderu z konspektem - wykorzystasz je w swoim projekcie.
-
-* Interfejs określa jedynie, że dana klasa ma posiadać określoną metodę - dlatego w interfejsie nie ma implementacji - wszystkie metody są
-  z założenia abstrakcyjne (można pominąć modyfikator `abstract`).
-
-* W interfejsie wszystkie metody są z założenia publiczne, dlatego nie ma potrzeby dodania modyfikatora dostępu
-  `public`. Od Javy 9 interfejs może posiadać także metody prywatne. Od Javy 8 interfejsy mogą posiadać metody statyczne (takie same jak metody statyczne w klasach) oraz metody domyślne (oznaczane modyfikatorem `default`), które posiadają implementację.
-
-* Podstawianie obiektów realizujących interfejs pod deklaracje metod i zmiennych wymagających interfejsu jest możliwe, bo w Javie działa **polimorfizm**. Przykładowo:
-
-  ```java
-  MoveValidator validator = new RectangularMap(10, 10); // RectangularMap pośrednio realizuje MoveValidator 
-  validator.canMoveTo(new Vector2d(1, 2)); // wywołanie poprawne, Java wywoła implementację metody z RectangularMap
-  // validator.place(animal);  wywołanie niepoprawne, kod się NIE skompiluje! MoveValidator nie ma metody place()
-  ```
-
-* Klasa deklaruje fakt implementacji interfejsu za pomocą słowa kluczowego `implements`, np.
-
-  ```java
-  class RectangularMap implements WorldMap {
-  }
-  ```
-
-* Interfejs `Map` definiuje w Javie strukturę słownikową, czyli mapę odwzorowującą *klucze* na *wartości*.
-
-* Jedną z najczęściej wykorzystywanych implementacji interfejsu `Map` jest klasa `HashMap`, przykładowo:
+* Wyjątki są mechanizmem pozwalającym przekazywać informację o błędzie pomiędzy odległymi fragmentami kodu.
+* Zgłoszenie błędu odbywa się poprzez *rzucenie wyjątku*. W Javie służy do tego słowo kluczowe `throw`:
 
     ```java
-    Map<Vector2d, Animal> animals = new HashMap<>();
-    ```
-
-* Poprawne działanie `HashMap` uzależnione jest od implementacji metod `equals` oraz `hashCode` w klasie, która stanowi
-  klucze mapy (w ćwiczeniu dotyczy to klasy `Vector2d`).
-
-* Wynik działania metody `hashCode` musi być zgodny z wynikiem działania metody `equals`, tzn. jeśli dwa obiekty są
-  równe według `equals`, to ich `hashCode` musi być równy.
-
-* Przykładowa implementacja metody `hashCode` dla klasy `Vector2d` może wyglądać następująco:
+    throw new IllegalArgumentException("ABC argument is invalid")
+	```
+* Nieobsłużony wyjątek powoduje przerwanie działania aplikacji.
+* Obsługa wyjątków odbywa się za pomocą mechanizmu *przechwytywania wyjątków*. W Javie służy do tego konstrukcja `try...catch`:
 
     ```java
-    @Override
-    public int hashCode() {
-      return Objects.hash(this.x, this.y);
+    try {
+      // kod który może rzucić wyjątek
+    } catch(IllegalArgumentException ex) {
+      // kod obsługi wyjątku
     }
     ```
+  Wyjątek może być rzucony na dowolnym poziomie w kodzie, który otoczony jest blokiem `try`. Tzn. w kodzie tym może być
+  wiele zagnieżdżonych wywołań funkcji, a i tak blok `try` przechwyci taki wyjątek, pod warunkiem, że nie zostanie on obsłużony
+  na niższym poziomie.
 
-* Używanie mapy nie wymaga jawnego wywoływania metody `hashCode`, ale jest ona używana wewnętrznie dla potrzeb optymalizacji.
-  Istotą funkcji jest fakt, że dla identycznych wartości `x` i `y` wartość funkcji `hashCode` będzie identyczna.
+* Wyjątki w Javie dzielą się na **checked** i **unchecked**. W pierwszym przypadku konieczna jest ich deklaracja (kompilator nie pozwoli zostawić rzuconego wyjątku bez jego obsługi), w drugim - wyjątki mogą być rzucane bez konieczności ich definiowania lub łapania (ale niezłapanie wyjątku wiąże się z przerwaniem wątku lub programu). Aby stworzyć wyjątek typu *checked*, wystarczy podziedziczyć po klasie `Exception`. Wyjątki *unchecked* dziedziczą z kolei po `RuntimeException`.
+
+* Wzorce projektowe są koncepcją występującą w programowaniu obiektowym polegającą na tym, że określona klasa problemów
+  może być rozwiązana w schematyczny sposób. Rozwiązanie problemu jednak nie może być (najczęściej) zawarte w jednej
+  klasie, dlatego wzorzec stanowi swego rodzaju szkielet rozwiązania, który określa jakie klasy i interfejsy muszą być
+  wykorzystane, aby poprawnie rozwiązać dany problem.
+
+* Przykładem wzorca jest [obserwator (*observer*)](https://refactoring.guru/design-patterns/observer) - rozwiązuje on problem zmian wewnętrznego stanu obiektu bez konieczności uzależniania klasy od wielu innych klas, które mają na te zmiany reagować.
+* Innym wzorcem jest [metoda szablonowa (template method)](https://refactoring.guru/design-patterns/template-method) - jest to sposób na wykorzystanie mechanizmu dziedziczenia i metod abstrakcyjnych do jeszcze większej redukcji powtarzającego się kodu.
+* Rekordy to proste struktury opisujące **niezmienne (*immutable*)** dane. Korzystamy z nich, by uniknąć żmudnego tworzenia getterów, setterów, konstruktorów, equals, hashCode i toString - wszystkie te elementy są automatycznie generowane!
+    ```java
+    public record Color(int red, int blue, int green) {}
+    ```
+
+  Ten kod pozwala tworzyć obiekty kolorów i odwoływać się do nich tak podobnie w przypadku zwykłych klas:
+    ```java
+    Color color = new Color(255, 20, 10);
+    int blue = color.blue();
+    System.out.println(color); // wypisze "Color[red=255, blue=20, green=10]"
+    ```
+
+
+
+​	
