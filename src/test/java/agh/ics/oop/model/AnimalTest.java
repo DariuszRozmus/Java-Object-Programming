@@ -14,7 +14,7 @@ public class AnimalTest {
         Animal animal5 = new Animal();
 
         //when
-        RectangularMap rectangularMap = new RectangularMap(10,10);
+        WorldMap rectangularMap = new RectangularMap(new Vector2d(10,10));
         animal1.move(MoveDirection.FORWARD, rectangularMap);
         animal2.move(MoveDirection.BACKWARD, rectangularMap);
         animal3.move(MoveDirection.LEFT, rectangularMap);
