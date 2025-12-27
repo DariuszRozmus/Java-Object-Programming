@@ -2,10 +2,7 @@ package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.MapVisualizer;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 abstract class AbstractWorldMap implements WorldMap {
 
@@ -13,18 +10,20 @@ abstract class AbstractWorldMap implements WorldMap {
     protected final Vector2d DOWNCORNER = new Vector2d(0, 0);
     protected Vector2d UPCORNER;
     protected final MapVisualizer mapVisualizer;
+    protected List<MapChangeListener> eventListeners = new ArrayList<>();
 
     protected AbstractWorldMap(Map<Vector2d, Animal> animals) {
         this.animals = animals;
         this.mapVisualizer = new MapVisualizer(this);
     }
 
-    public boolean place(Animal animal) {
+    public void place(Animal animal) throws IncorrectPositionException{
         if(UPCORNER.follows(animal.getPosition()) && DOWNCORNER.precedes(animal.getPosition())) {
             animals.put(animal.getPosition(), animal);
-            return true;
         }
-        return false;
+        else {
+            throw new IncorrectPositionException(animal.getPosition());
+        }
     }
 
     public void move(Animal animal, MoveDirection direction) {
@@ -54,8 +53,20 @@ abstract class AbstractWorldMap implements WorldMap {
         return new ArrayList<>(animals.values());
     }
 
+    public Boundary getCurrentBoundary() {
+        return new Boundary(DOWNCORNER, UPCORNER);
+    }
+
+    public void addMapChangeListener(MapChangeListener listener) {
+        eventListeners.add(listener);
+    }
+
+    public void removeMapChangeListener(MapChangeListener listener) {
+        eventListeners.remove(listener);
+    }
+
     public String toString() {
-        return mapVisualizer.draw(DOWNCORNER, UPCORNER);
+        return mapVisualizer.draw(getCurrentBoundary().lowerLeft(), getCurrentBoundary().upperRight());
     }
 
 }
