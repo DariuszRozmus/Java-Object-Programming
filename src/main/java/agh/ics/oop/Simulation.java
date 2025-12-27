@@ -6,18 +6,19 @@ import agh.ics.oop.model.util.MapVisualizer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Simulation {
+public class Simulation implements Runnable{
 
     private List<MoveDirection> moves;
     private List<Vector2d> positions;
     private List<Animal> animals = new ArrayList<>();
     private WorldMap worldMap;
-    private ConsoleMapDisplay consoleMapDisplay = new ConsoleMapDisplay();
+    private ConsoleMapDisplay consoleMapDisplay;
 
-    public Simulation(List<Vector2d> positions, List<MoveDirection> moves, WorldMap worldMap) {
+    public Simulation(List<Vector2d> positions, List<MoveDirection> moves, WorldMap worldMap, ConsoleMapDisplay consoleMapDisplay) {
         this.moves = moves;
         this.positions = positions;
         this.worldMap = worldMap;
+        this.consoleMapDisplay = consoleMapDisplay;
     }
 
     public void showAnimals(){
@@ -52,7 +53,8 @@ public class Simulation {
         for (int i=0; i < moves.size(); i++) {
             worldMap.move(animals.get(i % animals.size()), moves.get(i));
             consoleMapDisplay.mapChanged(worldMap,
-                    " Zwierze nr "+i % animals.size()+": "+moves.get(i)+" pozycja: "+animals.get(i%animals.size()).getPosition());
+                    " Zwierze nr "+i % animals.size()+": "+moves.get(i)+" pozycja: "
+                            + animals.get(i%animals.size()).getPosition());
         }
     }
 }
