@@ -11,7 +11,9 @@ public class World {
     public static void main(String[] args) {
         System.out.println("system wystartowal");
         OptionsParser parser = new OptionsParser();
-        String[] arguments = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f"};
+        String[] arguments = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f",
+                "f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f",
+                "f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f"};
         List<MoveDirection> directions;
         try {
             directions = parser.parse(arguments);
@@ -21,11 +23,22 @@ public class World {
             return;
         }
         List<Vector2d> positions = List.of(new Vector2d(2,2), new Vector2d(3,3), new Vector2d(4,4));
-        WorldMap map = new GrassField(10);
-        Simulation simulation = new Simulation(positions, directions, map);
-        simulation.run();
-        simulation.showAnimals();
-        simulation.showMoves();
+        ConsoleMapDisplay consoleMapDisplay = new ConsoleMapDisplay();
+        Simulation simulationGrassField = new Simulation(positions, directions, new GrassField(10), consoleMapDisplay);
+        Simulation simulationRectangularMap = new Simulation(positions, directions, new RectangularMap(new Vector2d(10,10)), consoleMapDisplay);
+        var mapList = List.of(simulationGrassField, simulationRectangularMap);
+        SimulationEngine engine = new SimulationEngine(mapList);
+        engine.runAsync();
+        try {
+            engine.awaitSimulationsEnd();
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+//        simulation.run();
+//        simulation.showAnimals();
+//        simulation.showMoves();
 
         System.out.println("system zakonczyl dzialanie");
     }

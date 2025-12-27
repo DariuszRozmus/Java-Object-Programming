@@ -1,9 +1,6 @@
 package agh.ics.oop;
 
-import agh.ics.oop.model.Animal;
-import agh.ics.oop.model.MoveDirection;
-import agh.ics.oop.model.RectangularMap;
-import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -22,7 +19,7 @@ public class SimulationTest {
 
         //when
         RectangularMap rectangularMap = new RectangularMap(new Vector2d(10,10));
-        Simulation simulation = new Simulation(positions, directions, rectangularMap);
+        Simulation simulation = new Simulation(positions, directions, rectangularMap, new ConsoleMapDisplay());
         simulation.run();
 
         //then

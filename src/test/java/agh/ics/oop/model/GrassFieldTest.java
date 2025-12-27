@@ -18,7 +18,7 @@ public class GrassFieldTest {
         String[] input = {"f", "b", "f", "b"};
 
         var moveDirections = parser.parse(input);
-        var simulation = new Simulation(positions, moveDirections, grassField);
+        var simulation = new Simulation(positions, moveDirections, grassField, new ConsoleMapDisplay());
         simulation.run();
 
         var elements = grassField.getElements();
