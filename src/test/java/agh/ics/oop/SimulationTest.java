@@ -23,7 +23,7 @@ public class SimulationTest {
         //when
         RectangularMap rectangularMap = new RectangularMap(new Vector2d(10,10));
         Simulation simulation = new Simulation(positions, directions, rectangularMap);
-        simulation.run(rectangularMap);
+        simulation.run();
 
         //then
         List<Animal> animals = simulation.getAnimals();
