@@ -12,13 +12,12 @@ public class Simulation {
     private List<Vector2d> positions;
     private List<Animal> animals = new ArrayList<>();
     private WorldMap worldMap;
-//    private MapVisualizer mapVisualizer;
+    private ConsoleMapDisplay consoleMapDisplay = new ConsoleMapDisplay();
 
     public Simulation(List<Vector2d> positions, List<MoveDirection> moves, WorldMap worldMap) {
         this.moves = moves;
         this.positions = positions;
         this.worldMap = worldMap;
-//        this.mapVisualizer = new MapVisualizer(worldMap);
     }
 
     public void showAnimals(){
