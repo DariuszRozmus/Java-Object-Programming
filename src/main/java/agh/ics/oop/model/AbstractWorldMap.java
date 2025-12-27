@@ -11,6 +11,8 @@ abstract class AbstractWorldMap implements WorldMap {
     protected Vector2d UPCORNER;
     protected final MapVisualizer mapVisualizer;
     protected List<MapChangeListener> eventListeners = new ArrayList<>();
+    protected final UUID uuid = UUID.randomUUID();
+    protected int changeCounter = 0;
 
     protected AbstractWorldMap(Map<Vector2d, Animal> animals) {
         this.animals = animals;
@@ -63,6 +65,16 @@ abstract class AbstractWorldMap implements WorldMap {
 
     public void removeMapChangeListener(MapChangeListener listener) {
         eventListeners.remove(listener);
+    }
+
+    @Override
+    public UUID getId() {
+        return uuid;
+    }
+
+    public int getIncrementCounter(){
+        changeCounter ++;
+        return changeCounter;
     }
 
     public String toString() {
