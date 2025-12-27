@@ -1,7 +1,5 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.util.MapVisualizer;
-
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -24,6 +22,7 @@ public class GrassField extends AbstractWorldMap{
         for (Vector2d position : randomPositionGenerator) {
             grasses.put(position, new Grass(position));
         }
+        System.out.println(UPCORNER);
     }
 
     @Override
@@ -58,7 +57,7 @@ public class GrassField extends AbstractWorldMap{
         return Stream.concat(listOfAnimals.stream(), listOfGrass.stream()).toList();
     }
     @Override
-    public String toString() {
-        return mapVisualizer.draw(DOWNCORNER, upperRight());
+    public Boundary getCurrentBoundary() {
+        return new Boundary(DOWNCORNER, upperRight());
     }
 }
