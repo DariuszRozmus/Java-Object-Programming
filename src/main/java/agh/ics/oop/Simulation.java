@@ -40,12 +40,15 @@ public class Simulation {
         return moves;
     }
 
-    public void run(MoveValidator validator){
+    public void run(){
         for(Vector2d position: positions) {
             Animal animal = new Animal(position);
-            animals.add(animal);
-//            boolean bool = this.worldMap.place(new Animal((Vector2d) positions));
-            worldMap.place(animal);
+            try {
+                worldMap.place(animal);
+                animals.add(animal);
+            } catch (IncorrectPositionException e) {
+                System.out.println(e.getMessage());
+            }
         }
         for (int i=0; i < moves.size(); i++) {
 //            animals.get(i%positions.size()).move(moves.get(i),this.worldMap);
