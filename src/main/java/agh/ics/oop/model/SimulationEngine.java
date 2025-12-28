@@ -4,6 +4,9 @@ import agh.ics.oop.Simulation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class SimulationEngine {
 
@@ -27,6 +30,16 @@ public class SimulationEngine {
         for(Thread thread : simulationThreads){
            thread.start();
         }
+    }
+
+    public void runAsyncThreadPool() throws InterruptedException {
+//        int cores = Runtime.getRuntime().availableProcessors();
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        for(Simulation simulation : simulationList){
+            executorService.submit(new Thread(simulation));
+        }
+        executorService.shutdown();
+        executorService.awaitTermination(1, TimeUnit.HOURS);
     }
 
     public void awaitSimulationsEnd () throws InterruptedException {
