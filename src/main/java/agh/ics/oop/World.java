@@ -2,6 +2,7 @@ package agh.ics.oop;
 
 import agh.ics.oop.model.*;
 import agh.ics.oop.Simulation;
+import agh.ics.oop.presenter.SimulationPresenter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,12 +17,7 @@ public class World {
         OptionsParser parser = new OptionsParser();
 
         int repeatCount = 400000;
-        String[] baseArguments = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f"};
-        String[] arguments = new String[baseArguments.length * repeatCount];
-
-        for (int i = 0; i < repeatCount; i++) {
-            System.arraycopy(baseArguments, 0, arguments, i * baseArguments.length, baseArguments.length);
-        }
+        String[] arguments = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f"};
 
         List<MoveDirection> directions;
         try {
@@ -31,29 +27,16 @@ public class World {
             System.exit(1);
             return;
         }
+        WorldMap worldMap = new RectangularMap(new Vector2d(7,7));
         List<Vector2d> positions = List.of(new Vector2d(2,2), new Vector2d(3,3), new Vector2d(4,4));
-        ConsoleMapDisplay consoleMapDisplay = new ConsoleMapDisplay();
-//        Simulation simulationGrassField = new Simulation(positions, directions, new GrassField(10), consoleMapDisplay);
-//        Simulation simulationRectangularMap = new Simulation(positions, directions, new RectangularMap(new Vector2d(10,10)), consoleMapDisplay);
-        List<Simulation> mapList = new ArrayList<>();
-        for (int i = 0; i<6; i++){
-            Simulation simulation1 = new Simulation(positions, directions, new GrassField(10), consoleMapDisplay);
-            Simulation simulation2 = new Simulation(positions, directions, new RectangularMap(new Vector2d(10,10)), consoleMapDisplay);
-            mapList.add(simulation1);
-            mapList.add(simulation2);
-        }
-        SimulationEngine engine = new SimulationEngine(mapList);
-        try {
-            engine.runAsyncThreadPool();
-            engine.awaitSimulationsEnd();
-        } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e);
-        }
+        SimulationPresenter simulationPresenter = new SimulationPresenter();
+        simulationPresenter.setWorldMap(worldMap);
+        ConsoleMapDisplay consoleMapDisplay = new ConsoleMapDisplay(simulationPresenter);
+        Simulation simulation = new Simulation(positions, directions, worldMap, consoleMapDisplay);
 
-//        simulation.run();
-//        simulation.showAnimals();
-//        simulation.showMoves();
+        simulation.run();
+        simulation.showAnimals();
+        simulation.showMoves();
 
         System.out.println("system zakonczyl dzialanie");
     }
