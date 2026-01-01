@@ -2,6 +2,7 @@ package agh.ics.oop;
 
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.MapVisualizer;
+import javafx.application.Platform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,10 +52,19 @@ public class Simulation implements Runnable{
             }
         }
         for (int i=0; i < moves.size(); i++) {
+            try {
+                Thread.sleep(500); // 500 ms = pół sekundy opóźnienia
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             worldMap.move(animals.get(i % animals.size()), moves.get(i));
-            consoleMapDisplay.mapChanged(worldMap,
-                    " Zwierze nr "+i % animals.size()+": "+moves.get(i)+" pozycja: "
-                            + animals.get(i%animals.size()).getPosition());
+            int finalI = i;
+            Platform.runLater(() ->
+                    consoleMapDisplay.mapChanged(worldMap,
+                            " Zwierze nr " + (finalI % animals.size()) + ": " + moves.get(finalI) +
+                                    " pozycja: " + animals.get(finalI % animals.size()).getPosition())
+            );
+
         }
     }
 }
