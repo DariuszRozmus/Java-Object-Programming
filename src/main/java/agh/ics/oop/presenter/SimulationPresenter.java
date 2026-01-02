@@ -39,9 +39,12 @@ public class SimulationPresenter {
     @FXML
     void initialize(){
         startButton.setOnAction(actionEvent -> {
-            new Thread(simulation).start();
             startButton.setDisable(true);
-            });
+            String[] moves = this.getMoves();
+            List<MoveDirection> directions = parser.parse(moves);
+            Simulation simulation = new Simulation(positions, directions, worldMap, consoleMapDisplay);
+            new Thread(simulation).start();
+        });
     }
     public void drawMap(){
         infoLabel.setText(worldMap.toString());
