@@ -34,7 +34,8 @@ public class SimulationApp extends Application {
 
         System.out.println("system wystartowal");
         OptionsParser parser = new OptionsParser();
-        String[] arguments = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f"};
+        String[] arguments = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f",
+                "f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f"};
         List<MoveDirection> directions;
         try {
             directions = parser.parse(arguments);
@@ -43,17 +44,21 @@ public class SimulationApp extends Application {
             System.exit(1);
             return;
         }
-//        WorldMap worldMap = new RectangularMap(new Vector2d(5,5));
-        WorldMap worldMap = new GrassField(17);
+        String[] args = {""};
+        World world = new World();
+//        new Thread(new World(presenter)).start();
+        WorldMap worldMap = new RectangularMap(new Vector2d(5,5));
+//        WorldMap worldMap = new GrassField(10);
         List<Vector2d> positions = List.of(new Vector2d(2,2), new Vector2d(3,3), new Vector2d(4,4));
         presenter.setWorldMap(worldMap);
         ConsoleMapDisplay consoleMapDisplay = new ConsoleMapDisplay(presenter);
         Simulation simulation = new Simulation(positions, directions, worldMap, consoleMapDisplay);
-        new Thread(simulation).start();
-        simulation.showAnimals();
-        simulation.showMoves();
-
-        System.out.println("system zakonczyl dzialanie");
+        presenter.setSimulation(simulation);
+        //        new Thread(simulation).start();
+//        simulation.showAnimals();
+//        simulation.showMoves();
+//
+//        System.out.println("system zakonczyl dzialanie");
     }
 
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
