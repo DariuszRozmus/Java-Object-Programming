@@ -2,16 +2,23 @@ package agh.ics.oop.presenter;
 
 import agh.ics.oop.OptionsParser;
 import agh.ics.oop.Simulation;
-import agh.ics.oop.model.ConsoleMapDisplay;
-import agh.ics.oop.model.MoveDirection;
-import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.WorldMap;
+import agh.ics.oop.model.*;
 import javafx.fxml.FXML;
+import javafx.geometry.VPos;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 
+import java.util.Collection;
 import java.util.List;
+
+import static java.awt.Color.black;
+//import static jdk.nio.zipfs.ZipFileAttributeView.AttrID.size;
 
 public class SimulationPresenter {
     private WorldMap worldMap;
@@ -32,6 +39,9 @@ public class SimulationPresenter {
     private OptionsParser parser;
     private List<Vector2d> positions;
     private ConsoleMapDisplay consoleMapDisplay;
+    @FXML
+    private Canvas mapGrid = new Canvas();
+//    private Boundary boundary;
 
     public SimulationPresenter(){
     }
