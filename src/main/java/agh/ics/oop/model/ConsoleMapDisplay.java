@@ -5,6 +5,9 @@ import agh.ics.oop.presenter.SimulationPresenter;
 public class ConsoleMapDisplay implements MapChangeListener{
 
     private SimulationPresenter simulationPresenter;
+
+    public ConsoleMapDisplay(){}
+
     public ConsoleMapDisplay(SimulationPresenter simulationPresenter){
         this.simulationPresenter = simulationPresenter;
     }
@@ -15,6 +18,7 @@ public class ConsoleMapDisplay implements MapChangeListener{
         System.out.println("change: " + map.getIncrementCounter() + message);
         System.out.println(map);
         simulationPresenter.drawMap();
+        simulationPresenter.showMoves(message);
 
     }
 
