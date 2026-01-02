@@ -50,14 +50,38 @@ public class SimulationPresenter {
     void initialize(){
         startButton.setOnAction(actionEvent -> {
             startButton.setDisable(true);
-            String[] moves = this.getMoves();
+            String[] moves = moveField.getText().split(" ");
             List<MoveDirection> directions = parser.parse(moves);
             Simulation simulation = new Simulation(positions, directions, worldMap, consoleMapDisplay);
             new Thread(simulation).start();
         });
     }
     public void drawMap(){
-        infoLabel.setText(worldMap.toString());
+        mapGrid.setHeight(500);
+        mapGrid.setWidth(500);
+        GraphicsContext graphics = mapGrid.getGraphicsContext2D();
+        graphics.setFill(Color.WHITE);
+        graphics.setStroke(Color.BLACK);
+        graphics.setLineWidth(2.0);
+        graphics.fillRect(0, 0, mapGrid.getWidth(), mapGrid.getHeight());
+        Boundary boundary = worldMap.getCurrentBoundary();
+        for (int x = 0; x < mapGrid.getWidth() + 1; x += 20) {
+            graphics.strokeLine(x + 10, 0, x + 10, mapGrid.getHeight());  // BORDER_OFFSET = BORDER_WIDTH / 2
+        }
+        for (int y = 0; y < mapGrid.getHeight() + 1; y += 20) {
+            graphics.strokeLine(0, y + 10, mapGrid.getWidth(), y + 10);  // BORDER_OFFSET = BORDER_WIDTH / 2
+        }
+        Collection<WorldElement> worldElements= worldMap.getElements();
+        for (WorldElement worldElement : worldElements){
+            graphics.strokeText(worldElement.toString(),
+                    worldElement.getPosition().getX() * 20 + 15,
+                    mapGrid.getHeight() - worldElement.getPosition().getY() * 20 - 10,
+                    10);
+        }
+//        graphics.setTextAlign(TextAlignment.CENTER);
+//        graphics.setTextBaseline(VPos.CENTER);
+//        graphics.setFont(new Font("Arial", size));
+//        graphics.setFill(black);
     }
     public void showMoves(String text){
         moveInfoLabel.setText(text);
