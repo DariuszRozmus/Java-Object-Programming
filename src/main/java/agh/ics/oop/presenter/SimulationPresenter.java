@@ -89,9 +89,6 @@ public class SimulationPresenter {
     public void setWorldMap(WorldMap worldMap) {
         this.worldMap = worldMap;
     }
-//    public void setAll(Simulation simulation){
-//        this.simulation = simulation;
-//    }
     public void setConsoleMapDisplay(ConsoleMapDisplay consoleMapDisplay){
         this.consoleMapDisplay = consoleMapDisplay;
     }

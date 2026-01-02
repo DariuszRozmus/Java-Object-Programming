@@ -47,8 +47,8 @@ public class SimulationApp extends Application {
 //        String[] args = {""};
 //        World world = new World();
 //        new Thread(new World(presenter)).start();
-        WorldMap worldMap = new RectangularMap(new Vector2d(5,5));
-//        WorldMap worldMap = new GrassField(10);
+//        WorldMap worldMap = new RectangularMap(new Vector2d(5,5));
+        WorldMap worldMap = new GrassField(10);
         List<Vector2d> positions = List.of(new Vector2d(2,2), new Vector2d(3,3), new Vector2d(4,4));
 //        presenter.setWorldMap(worldMap);
         ConsoleMapDisplay consoleMapDisplay = new ConsoleMapDisplay(presenter);
